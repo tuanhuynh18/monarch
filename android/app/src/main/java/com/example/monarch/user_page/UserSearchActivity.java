@@ -1,6 +1,7 @@
 package com.example.monarch.user_page;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,7 +16,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import com.example.monarch.R
+
 import com.android.volley.Cache;
 import com.android.volley.Network;
 import com.android.volley.Request;
@@ -27,6 +28,7 @@ import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.monarch.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -40,6 +42,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/*** This is the main activity of user page
+ * @author Yuxin
+ * @version 1.0
+ */
 public class UserSearchActivity extends Activity {
     private EditText location;
     private EditText budget;
@@ -81,19 +88,18 @@ public class UserSearchActivity extends Activity {
 
     }
 
+    /**
+
+     * get itineraries the user has saved before
+     * get user id data from login page
+     * request backend Api, Post user id, accept JsonArray, get itineray data
+
+     */
     private void getItinerary() throws JSONException {
 
         Bundle b = getIntent().getExtras();
-        //String userId=b.getString("userId");
-        String userId = "yingyingying";
-//        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-//
-//        // Set up the network to use HttpURLConnection as the HTTP client.
-//        Network network = new BasicNetwork(new HurlStack());
-//
-//        Context context = UserSearchActivity.this;
+        String userId=b.getString("userId");
 
-        //requestQueue.start();
 
         String url = "http://baidu.com";
         Map<String, Object> param = new HashMap<>();
@@ -175,6 +181,11 @@ public class UserSearchActivity extends Activity {
         itinerary.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
     }
 
+    /**
+
+     * Adapter for user history itineraries recyclerview
+
+     */
 
     public static class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAdapter.ViewHolder> {
 
@@ -244,6 +255,13 @@ public class UserSearchActivity extends Activity {
 
 
 
+    /**
+
+     * triggered by user click the search button
+     * request backend api, POST, accept JsonArray
+     * turn to the recommendation page, pass received data to recommendation page
+
+     */
     private void attemptSearch() {
         String locationVal = location.getText().toString();
         String bugetVal = budget.getText().toString();
@@ -309,77 +327,10 @@ public class UserSearchActivity extends Activity {
         //public PostObjectRequest(String url, Map<String,String> params,Type type, ResponseListener lis
 
 
-//        Intent intent = new Intent(this, SecondActivity.class);
-//        intent.putExtra("search result", searchResults.toString());
-//        startActivity(intent);
+        Intent intent = new Intent(this, SecondActivity.class);
+        intent.putExtra("search result", searchResults.toString());
+        startActivity(intent);
     }
 
 }
 
-//    /**
-//     * Created by gyzhong on 15/3/1.
-//     * 简化回调接口
-//     */
-//    public interface ResponseListener<T> extends Response.ErrorListener,Response.Listener<T> {
-//    }
-//    /**
-//     * Created by gyzhong on 15/3/1.
-//     */
-//    public class PostObjectRequest<T> extends Request<T> {
-//
-//        /**
-//         * 正确数据的时候回掉用
-//         */
-//        private ResponseListener mListener ;
-//        /*用来解析 json 用的*/
-//        private Gson mGson ;
-//        /*在用 gson 解析 json 数据的时候，需要用到这个参数*/
-//        private Type mClazz ;
-//        /*请求 数据通过参数的形式传入*/
-//        private Map<String,String> mParams;
-//        //需要传入参数，并且请求方式不能再为 get，改为 post
-//        public PostObjectRequest(String url, Map<String,String> params,Type type, ResponseListener listener) {
-//            super(Method.POST, url, listener);
-//            this.mListener = listener ;
-//            mGson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create() ;
-//            mClazz = type ;
-//            setShouldCache(false);
-//            mParams = params ;
-//        }
-//
-//        /**
-//         * 这里开始解析数据
-//         * @param response Response from the network
-//         * @return
-//         */
-//        @Override
-//        protected Response<T> parseNetworkResponse(NetworkResponse response) {
-//            try {
-//                T result ;
-//                String jsonString =
-//                        new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-//                Log.v("zgy", "====jsonString===" + jsonString);
-//                result = mGson.fromJson(jsonString,mClazz) ;
-//                return Response.success(result,
-//                        HttpHeaderParser.parseCacheHeaders(response));
-//            } catch (UnsupportedEncodingException e) {
-//                return Response.error(new ParseError(e));
-//            }
-//        }
-//
-//        /**
-//         * 回调正确的数据
-//         * @param response The parsed response returned by
-//         */
-//        @Override
-//        protected void deliverResponse(T response) {
-//            mListener.onResponse(response);
-//        }
-//
-//        //关键代码就在这里，在 Volley 的网络操作中，如果判断请求方式为 Post 则会通过此方法来获取 param，所以在这里返回我们需要的参数，
-//
-//        protected Map<String, String> getParams() throws AuthFailureError {
-//            return mParams;
-//        }
-//    }
-//}
