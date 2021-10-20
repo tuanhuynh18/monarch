@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+<%= render @accommodation %>
+
+<div>
+  <%= link_to "Edit this accommodation", edit_accommodation_path(@accommodation) %> |
+  <%= link_to "Back to accommodations", accommodations_path %>
+
+  <%= button_to "Destroy this accommodation", accommodation_path(@accommodation), method: :delete %>
+</div>

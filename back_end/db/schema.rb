@@ -10,10 +10,78 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_18_215617) do
+ActiveRecord::Schema.define(version: 2021_10_19_213748) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accommodations", force: :cascade do |t|
+    t.string "title"
+    t.decimal "cost"
+    t.text "description"
+    t.text "note"
+    t.decimal "rating"
+    t.string "addressable_type"
+    t.bigint "addressable_id"
+    t.bigint "trip_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["addressable_type", "addressable_id"], name: "index_accommodations_on_addressable"
+    t.index ["trip_id"], name: "index_accommodations_on_trip_id"
+  end
+
+  create_table "activities", force: :cascade do |t|
+    t.string "title"
+    t.decimal "cost"
+    t.text "description"
+    t.text "note"
+    t.decimal "rating"
+    t.string "addressable_type"
+    t.bigint "addressable_id"
+    t.bigint "trip_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["addressable_type", "addressable_id"], name: "index_activities_on_addressable"
+    t.index ["trip_id"], name: "index_activities_on_trip_id"
+  end
+
+  create_table "addresses", force: :cascade do |t|
+    t.string "line1"
+    t.string "line2"
+    t.string "city"
+    t.string "state"
+    t.integer "zip"
+    t.string "addressable_type"
+    t.bigint "addressable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["addressable_type", "addressable_id"], name: "index_addresses_on_addressable"
+  end
+
+  create_table "places", force: :cascade do |t|
+    t.string "title"
+    t.decimal "cost"
+    t.text "description"
+    t.text "note"
+    t.string "category"
+    t.decimal "rating"
+    t.string "addressable_type"
+    t.bigint "addressable_id"
+    t.bigint "trip_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["addressable_type", "addressable_id"], name: "index_places_on_addressable"
+    t.index ["trip_id"], name: "index_places_on_trip_id"
+  end
+
+  create_table "trips", force: :cascade do |t|
+    t.string "name"
+    t.decimal "budget"
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
