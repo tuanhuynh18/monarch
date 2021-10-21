@@ -18,12 +18,22 @@
             android:layout_weight="50"
             android:id="@+id/map_container"
             tools:ignore="Suspicious0dp">
-            <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:map="http://schemas.android.com/apk/res-auto"
-                android:name="com.google.android.gms.maps.SupportMapFragment"
+
+            <fragment
                 android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                tools:layout="@layout/activity_main" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@drawable/ic_full_screen" />
+
         </RelativeLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -31,6 +41,7 @@
             android:layout_height="0dp"
             android:layout_weight="50"
             android:id="@+id/trip_item_list_recycler_view"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
