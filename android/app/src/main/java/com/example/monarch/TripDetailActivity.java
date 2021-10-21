@@ -14,12 +14,18 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.monarch.util.ViewWeightAnimationWrapper;
@@ -32,6 +38,10 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
     private static final String TAG = "TripDetail";
@@ -47,6 +57,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private ImageView mFullScreenImageView;
     private RecyclerView mTripItemRecyclerView;
     private RelativeLayout mMapContainer;
+    private EditText mSearchText;
 
     // vars
     private boolean mLocationPermissionGranted = false;
@@ -60,6 +71,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         if (isServicesAvailable()) {
             Log.d(TAG, "onCreate: map created.");
             setContentView(R.layout.activity_trip_detail);
+
 
             mTripItemRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
             mMapContainer = findViewById(R.id.map_container);
@@ -79,11 +91,56 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 }
             });
 
+            mSearchText = findViewById(R.id.input_search);
+            mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                @Override
+                public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+                    if(actionId == EditorInfo.IME_ACTION_SEARCH
+                            || actionId == EditorInfo.IME_ACTION_DONE
+                            || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+                            || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+
+                        //execute our method for searching
+                        geoLocate();
+                    }
+
+                    return false;
+                }
+            });
+
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
 
         }
+    }
+
+    private void geoLocate(){
+        Log.d(TAG, "geoLocate: geolocating");
+
+        String searchString = mSearchText.getText().toString();
+
+        Geocoder geocoder = new Geocoder(TripDetailActivity.this);
+        List<Address> list = new ArrayList<>();
+        try{
+            list = geocoder.getFromLocationName(searchString, 1);
+        }catch (IOException e){
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+        }
+
+        if(list.size() > 0){
+            Address address = list.get(0);
+            LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
+            Log.d(TAG, "geoLocate: found a location: " + address.toString());
+            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
+            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+//            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
+//                    address.getAddressLine(0));
+            mGoogleMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(searchString));
+        }
+
     }
 
     @Override
