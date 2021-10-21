@@ -16,12 +16,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,6 +35,7 @@ import android.widget.Toast;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -38,9 +43,15 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -53,16 +64,19 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private static final int MAP_LAYOUT_STATE_CONTRACTED = 0;
     private static final int MAP_LAYOUT_STATE_EXPANDED = 1;
 
+    private static final int DEFAULT_MAP_ZOOM = 15;
+
     // widgets
     private ImageView mFullScreenImageView;
     private RecyclerView mTripItemRecyclerView;
     private RelativeLayout mMapContainer;
-    private EditText mSearchText;
+    private AutoCompleteTextView mSearchText;
 
     // vars
     private boolean mLocationPermissionGranted = false;
     private int mMapLayoutState = 0; // 0 = contract, 1 = expand
     private GoogleMap mGoogleMap;
+//    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
 
 
     @Override
@@ -91,35 +105,72 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 }
             });
 
-            mSearchText = findViewById(R.id.input_search);
-            mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            // Initialize the SDK
+            Places.initialize(getApplicationContext(), getResources().getString(R.string.google_maps_API_key));
+
+            // Create a new PlacesClient instance
+            PlacesClient placesClient = Places.createClient(this);
+
+            // Initialize the AutocompleteSupportFragment.
+            AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+
+            // Specify the types of place data to return.
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME));
+
+            // Set up a PlaceSelectionListener to handle the response.
+            autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
                 @Override
-                public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-                    if(actionId == EditorInfo.IME_ACTION_SEARCH
-                            || actionId == EditorInfo.IME_ACTION_DONE
-                            || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-                            || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+                public void onPlaceSelected(@NonNull Place place) {
+                    // TODO: Get info about the selected place.
+                    Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+                    Log.i(TAG, "Place: " + place);
+                    LatLng latLong = place.getLatLng();
+                    String name = place.getName();
+                    moveCamera(latLong, DEFAULT_MAP_ZOOM, name);
+                }
 
-                        //execute our method for searching
-                        geoLocate();
-                    }
 
-                    return false;
+                @Override
+                public void onError(@NonNull Status status) {
+                    // TODO: Handle the error.
+                    Log.i(TAG, "An error occurred: " + status);
                 }
             });
+
+
+
+//            mSearchText = findViewById(R.id.input_search);
+//            mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+//                @Override
+//                public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
+//                    if(actionId == EditorInfo.IME_ACTION_SEARCH
+//                            || actionId == EditorInfo.IME_ACTION_DONE
+//                            || keyEvent.getAction() == KeyEvent.ACTION_DOWN
+//                            || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
+//
+//                        //execute our method for searching
+//                        geoLocate();
+//                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
+//                        return true;
+//                    }
+//
+//                    return false;
+//                }
+//            });
 
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
+
 
         }
     }
 
     private void geoLocate(){
         Log.d(TAG, "geoLocate: geolocating");
-
         String searchString = mSearchText.getText().toString();
-
         Geocoder geocoder = new Geocoder(TripDetailActivity.this);
         List<Address> list = new ArrayList<>();
         try{
@@ -132,16 +183,24 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             Address address = list.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             Log.d(TAG, "geoLocate: found a location: " + address.toString());
-            //Toast.makeText(this, address.toString(), Toast.LENGTH_SHORT).show();
-            mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
-//            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_ZOOM,
-//                    address.getAddressLine(0));
-            mGoogleMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(searchString));
+            moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_MAP_ZOOM,
+                    address.getAddressLine(0));
         }
 
     }
+
+    private void moveCamera(LatLng latLng, float zoom, String title){
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
+
+        if(!title.equals("My Location")){
+            MarkerOptions options = new MarkerOptions()
+                    .position(latLng)
+                    .title(title);
+            mGoogleMap.addMarker(options);
+        }
+    }
+
 
     @Override
     protected void onResume() {
@@ -298,22 +357,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
         LatLng currentLocation = new LatLng(33.77576938714813, -84.39629573138684);
-        double bottomBoundary =  currentLocation.latitude - .1;
-        double leftBoundary = currentLocation.longitude - .1;
-        double topBoundary = currentLocation.latitude + .1;
-        double rightBoundary = currentLocation.longitude + .1;
-        LatLngBounds boundary = new LatLngBounds(
-                new LatLng(-44, 113), // SW bounds
-                new LatLng(-10, 154)  // NE bounds
-        );
 
         // Move the camera instantly to Sydney with a zoom of 15.
-        mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
-
-        mGoogleMap.addMarker(new MarkerOptions()
-                .position(currentLocation)
-                .title("Marker in Sydney"));
-
+        moveCamera(currentLocation, DEFAULT_MAP_ZOOM, "My location");
     }
 }
 

@@ -44,25 +44,34 @@
                 android:background="@color/white"
                 android:id="@+id/relLayout1">
 
-                <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
-                    android:id="@+id/ic_magnify"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/ic_magnify"/>
+<!--                <ImageView-->
+<!--                    android:layout_width="15dp"-->
+<!--                    android:layout_height="15dp"-->
+<!--                    android:id="@+id/ic_magnify"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:src="@drawable/ic_magnify"/>-->
 
-                <EditText
+<!--                <AutoCompleteTextView-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="match_parent"-->
+<!--                    android:layout_toRightOf="@+id/ic_magnify"-->
+<!--                    android:layout_centerVertical="true"-->
+<!--                    android:textSize="15sp"-->
+<!--                    android:textColor="#000"-->
+<!--                    android:id="@+id/input_search"-->
+<!--                    android:background="@null"-->
+<!--                    android:hint="Enter Address, City or Zip Code"-->
+<!--                    android:imeOptions="actionSearch"-->
+<!--                    android:inputType="text"-->
+<!--                    android:maxLines="1"/>-->
+                <fragment android:id="@+id/autocomplete_fragment"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toRightOf="@+id/ic_magnify"
-                    android:layout_centerVertical="true"
-                    android:textSize="15sp"
-                    android:textColor="#000"
-                    android:id="@+id/input_search"
-                    android:background="@null"
-                    android:hint="Enter Address, City or Zip Code"
-                    android:imeOptions="actionSearch"/>
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                    />
+
 
 
             </RelativeLayout>
