@@ -9,7 +9,6 @@ class CreatePlaces < ActiveRecord::Migration[7.0]
       t.decimal :rating
 
       t.references :addressable, polymorphic: true, null: true
-      t.belongs_to :trip
 
       t.timestamps
     end

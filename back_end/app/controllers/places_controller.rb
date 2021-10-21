@@ -4,7 +4,7 @@ class PlacesController < ApplicationController
 
   # GET /places or /places.json
   def index
-    @places = (@trip.places || Place).all
+    @places = (@trip&.places || Place).all
   end
 
   # GET /places/1 or /places/1.json
@@ -23,7 +23,14 @@ class PlacesController < ApplicationController
   # POST /places or /places.json
   def create
     @place = Place.new(place_params) if @trip.nil?
-    @place = @trip.places.build(place_params) unless @trip.nil?
+    unless @trip.nil?
+      if place_params[:id].nil?
+        @place = @trip.places.build(place_params)
+      else
+        @place = Place.find(place_params[:id])
+        @trip.places << @place
+      end
+    end
 
     respond_to do |format|
       if @place.save
@@ -65,12 +72,17 @@ class PlacesController < ApplicationController
   end
 
   def set_trip
-    @trip = Trip.find(params[:trip_id])
+    @trip = Trip.find(params[:trip_id]) if params[:trip_id]
+  end
+
+  def trip_place_url(trip, place)
+    return place_url(place) if @trip.nil?
+    super(trip, place)
   end
 
   # Only allow a list of trusted parameters through.
   def place_params
-    params.require(:place).permit(:title, :address, :cost, :description, :note, :category, :rating,
+    params.require(:place).permit(:id, :title, :address, :cost, :description, :note, :category, :rating,
                                   address_attributes: [:line1, :line2, :city, :state, :zip])
   end
 end

@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
-  # resources :accommodations
-  # resources :activities
-  # resources :places
+  resources :accommodations
+  resources :activities
+  resources :places
 
   resources :trips do
     resources :accommodations

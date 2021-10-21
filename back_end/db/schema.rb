@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_10_19_213748) do
+ActiveRecord::Schema.define(version: 2021_10_20_224530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,11 +23,14 @@ ActiveRecord::Schema.define(version: 2021_10_19_213748) do
     t.decimal "rating"
     t.string "addressable_type"
     t.bigint "addressable_id"
-    t.bigint "trip_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["addressable_type", "addressable_id"], name: "index_accommodations_on_addressable"
-    t.index ["trip_id"], name: "index_accommodations_on_trip_id"
+  end
+
+  create_table "accommodations_trips", id: false, force: :cascade do |t|
+    t.integer "accommodation_id"
+    t.integer "trip_id"
   end
 
   create_table "activities", force: :cascade do |t|
@@ -38,11 +41,14 @@ ActiveRecord::Schema.define(version: 2021_10_19_213748) do
     t.decimal "rating"
     t.string "addressable_type"
     t.bigint "addressable_id"
-    t.bigint "trip_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["addressable_type", "addressable_id"], name: "index_activities_on_addressable"
-    t.index ["trip_id"], name: "index_activities_on_trip_id"
+  end
+
+  create_table "activities_trips", id: false, force: :cascade do |t|
+    t.integer "activity_id"
+    t.integer "trip_id"
   end
 
   create_table "addresses", force: :cascade do |t|
@@ -67,11 +73,14 @@ ActiveRecord::Schema.define(version: 2021_10_19_213748) do
     t.decimal "rating"
     t.string "addressable_type"
     t.bigint "addressable_id"
-    t.bigint "trip_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["addressable_type", "addressable_id"], name: "index_places_on_addressable"
-    t.index ["trip_id"], name: "index_places_on_trip_id"
+  end
+
+  create_table "places_trips", id: false, force: :cascade do |t|
+    t.integer "place_id"
+    t.integer "trip_id"
   end
 
   create_table "trips", force: :cascade do |t|

@@ -4,7 +4,7 @@ class ActivitiesController < ApplicationController
 
   # GET /activities or /activities.json
   def index
-    @activities = (@trip.activities || Activity).all
+    @activities = (@trip&.activities || Activity).all
   end
 
   # GET /activities/1 or /activities/1.json
@@ -23,7 +23,14 @@ class ActivitiesController < ApplicationController
   # POST /activities or /activities.json
   def create
     @activity = Activity.new(activity_params) if @trip.nil?
-    @activity = @trip.activities.build(activity_params) unless @trip.nil?
+    unless @trip.nil?
+      if activity_params[:id].nil?
+        @activity = @trip.activities.build(activity_params)
+      else
+        @activity = Activity.find(activity_params[:id])
+        @trip.activities << @activity
+      end
+    end
 
     respond_to do |format|
       if @activity.save
@@ -65,12 +72,17 @@ class ActivitiesController < ApplicationController
   end
 
   def set_trip
-    @trip = Trip.find(params[:trip_id])
+    @trip = Trip.find(params[:trip_id]) if params[:trip_id]
+  end
+
+  def trip_activity_url(trip, activity)
+    return activity_url(activity) if @trip.nil?
+    super(trip, activity)
   end
 
   # Only allow a list of trusted parameters through.
   def activity_params
-    params.require(:activity).permit(:title, :address, :cost, :description, :note, :rating,
+    params.require(:activity).permit(:id, :title, :address, :cost, :description, :note, :rating,
                                      address_attributes: [:line1, :line2, :city, :state, :zip])
   end
 end
