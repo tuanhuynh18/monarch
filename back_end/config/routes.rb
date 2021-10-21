@@ -1,4 +1,15 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :users
+    resources :accommodations
+    resources :activities
+    resources :trips
+    resources :addresses
+    resources :places
+
+    root to: "users#index"
+  end
+
   resources :accommodations
   resources :activities
   resources :places

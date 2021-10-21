@@ -1,3 +1,4 @@
+<%= column_div_tag 3 do %>
 <div id="<%= dom_id activity %>" class="scaffold_record">
   <p>
     <strong>Title:</strong>
@@ -6,7 +7,7 @@
 
   <p>
     <strong>Address:</strong>
-    <%= activity.address_id %>
+    <%= activity.address %>
   </p>
 
   <p>
@@ -33,3 +34,4 @@
     <%= link_to "Show this activity", activity %>
   </p>
 </div>
+<% end %>

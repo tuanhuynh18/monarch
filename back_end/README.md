@@ -1,3 +1,7 @@
+# Admin Dashboard
+A simple admin dashboard is available at [/admin][admin] that provides a tabular way to examine the data for each
+object class. A valid user account is needed to access the admin dashboard, but a real email is not needed to sign up.
+
 # API Documentation
 When submitting form data to the API, set the `Content-Type` and `Accepts` HTTP headers to `application/json`. Any form
 data sent to the server (e.g. via `POST` actions) should have a JSON body encoded as `raw json`, `form-data`, or
@@ -27,6 +31,7 @@ user.
 | Log In         |   `POST`   | `/users/sign_in.json`  | `{ "user" : { "username" : USERNAME, "password": PASSWORD } }` |
 | Sign Out       |    `GET`   | `/users/sign_out.json` |                                                                |
 
+[admin]: https://yata-monarch.herokuapp.com/admin
 [postman_download]: https://www.postman.com/downloads/
 [postman_env]: https://github.com/tuanhuynh18/monarch/blob/main/back_end/yata_back_end.postman_environment.json
 [postman_collection]: https://github.com/tuanhuynh18/monarch/blob/main/back_end/yata_back_end.postman_collection.json

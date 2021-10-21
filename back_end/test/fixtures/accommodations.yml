@@ -1,17 +1,13 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+## Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  address: one
-  cost: 9.99
-  description: MyText
-  note: MyText
-  rating: 9.99
+sleep_inn:
+  title: Sleep Inn
+  cost: 59.99
+  rating: 3.4
+  trip: spring_break
 
-two:
-  title: MyString
-  address: two
-  cost: 9.99
-  description: MyText
-  note: MyText
-  rating: 9.99
+best_western:
+  title: Best Western
+  cost: 69.99
+  rating: 4.9
+  trip: winter_break

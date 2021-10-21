@@ -60,7 +60,7 @@ class AccommodationsController < ApplicationController
   def destroy
     @accommodation.destroy
     respond_to do |format|
-      format.html { redirect_to trip_accommodations_url, notice: "Accommodation was successfully destroyed." }
+      format.html { redirect_to accommodations_url, notice: "Accommodation was successfully destroyed." }
       format.json { head :no_content }
     end
   end

@@ -1,17 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  address: one
-  cost: 9.99
-  description: MyText
-  note: MyText
-  rating: 9.99
+jetski:
+  title: Jetski
+  cost: 49.99
+  rating: 4.3
 
-two:
-  title: MyString
-  address: two
-  cost: 9.99
-  description: MyText
-  note: MyText
-  rating: 9.99
+parachuting:
+  title: Parachuting
+  cost: 999.99
+  rating: 4.9

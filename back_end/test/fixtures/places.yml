@@ -1,19 +1,11 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+## Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  title: MyString
-  address: one
-  cost: 9.99
-  description: MyText
-  note: MyText
-  category: MyString
-  rating: 9.99
+state_park:
+  title: State Park
+  cost: 19.99
+  rating: 4.1
 
-two:
-  title: MyString
-  address: two
+caves:
+  title: Caves
   cost: 9.99
-  description: MyText
-  note: MyText
-  category: MyString
-  rating: 9.99
+  rating: 3.2

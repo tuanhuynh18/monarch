@@ -86,8 +86,8 @@ ActiveRecord::Schema.define(version: 2021_10_20_224530) do
   create_table "trips", force: :cascade do |t|
     t.string "name"
     t.decimal "budget"
-    t.datetime "starts_at"
-    t.datetime "ends_at"
+    t.datetime "starts_at", precision: 6
+    t.datetime "ends_at", precision: 6
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

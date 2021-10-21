@@ -2,7 +2,7 @@ require "test_helper"
 
 class AccommodationsControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @accommodation = accommodations(:one)
+    @accommodation = accommodations(:sleep_inn)
   end
 
   test "should get index" do
@@ -17,7 +17,9 @@ class AccommodationsControllerTest < ActionDispatch::IntegrationTest
 
   test "should create accommodation" do
     assert_difference("Accommodation.count") do
-      post accommodations_url, params: { accommodation: { address_id: @accommodation.address_id, cost: @accommodation.cost, description: @accommodation.description, note: @accommodation.note, rating: @accommodation.rating, title: @accommodation.title } }
+      post accommodations_url, params: { accommodation: { cost: @accommodation.cost, description: @accommodation.description,
+                                                          note: @accommodation.note, rating: @accommodation.rating,
+                                                          title: @accommodation.title, address_attributes: addresses(:accommodation_one).attributes } }
     end
 
     assert_redirected_to accommodation_url(Accommodation.last)
@@ -34,7 +36,7 @@ class AccommodationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update accommodation" do
-    patch accommodation_url(@accommodation), params: { accommodation: { address_id: @accommodation.address_id, cost: @accommodation.cost, description: @accommodation.description, note: @accommodation.note, rating: @accommodation.rating, title: @accommodation.title } }
+    patch accommodation_url(@accommodation), params: { accommodation: { address: @accommodation.address, cost: @accommodation.cost, description: @accommodation.description, note: @accommodation.note, rating: @accommodation.rating, title: @accommodation.title } }
     assert_redirected_to accommodation_url(@accommodation)
   end
 
