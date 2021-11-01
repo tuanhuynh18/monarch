@@ -1,4 +1,4 @@
-package com.example.usr_page_test.user_page;
+package com.example.monarch.user_page;
 
 public class Address {
     String address;// = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()

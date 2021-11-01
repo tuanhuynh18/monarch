@@ -1,7 +1,4 @@
-package com.example.usr_page_test.user_page;
-
-import java.util.Timer;
-import java.util.TimerTask;
+package com.example.monarch.user_page;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -19,6 +16,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.permissionx.guolindev.PermissionX;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MyLocation {
     Timer timer1;

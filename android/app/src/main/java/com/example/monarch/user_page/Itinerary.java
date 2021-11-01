@@ -1,14 +1,23 @@
 package com.example.monarch.user_page;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Itinerary {
+    @SerializedName("name")
     private String location;
+    @SerializedName("starts_at")
     private String startDate;
+    @SerializedName("ends_at")
     private String endDate;
 
     public Itinerary(String location, String startDate, String endDate) {
         this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public Itinerary() {
+
     }
 
     public String getLocation() {

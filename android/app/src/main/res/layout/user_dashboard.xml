@@ -8,7 +8,7 @@
     >
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/logOutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="log out"
@@ -21,21 +21,34 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-<!--        <ImageView-->
-<!--            android:id="@+id/imageView1"-->
-<!--            android:layout_width="100dp"-->
-<!--            android:layout_height="100dp"-->
-<!--            android:layout_margin="4dp"-->
-<!--            android:scaleType="matrix"-->
-<!--            android:src="/Users/dawndawn/Desktop/acniang.png"-->
-<!--            android:layout_gravity="center_horizontal"></ImageView>-->
+        <!--        <ImageView-->
+        <!--            android:id="@+id/imageView1"-->
+        <!--            android:layout_width="100dp"-->
+        <!--            android:layout_height="100dp"-->
+        <!--            android:layout_margin="4dp"-->
+        <!--            android:scaleType="matrix"-->
+        <!--            android:src="/Users/dawndawn/Desktop/acniang.png"-->
+        <!--            android:layout_gravity="center_horizontal"></ImageView>-->
 
 
-        <TextView
-            android:id="@+id/textView1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text='Where to go?' />
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text='Where to go?' />
+
+            <Button
+                android:id="@+id/locate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="locate"
+                android:textSize="10dp" />
+        </LinearLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id = "@+id/layoutLocation"
@@ -46,7 +59,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id = "@+id/location"/>
+                android:id = "@+id/location"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -65,7 +79,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id = "@+id/budget"/>
+                android:id = "@+id/budget"
+                android:maxLines="1"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,7 +124,8 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/startDate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,7 +139,9 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/endDate"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>

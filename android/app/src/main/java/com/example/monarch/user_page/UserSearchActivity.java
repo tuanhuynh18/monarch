@@ -1,7 +1,13 @@
 package com.example.monarch.user_page;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +19,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +34,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.monarch.R;
@@ -37,9 +46,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 
@@ -55,39 +68,108 @@ public class UserSearchActivity extends Activity {
     private RecyclerView itinerary;
     private FloatingActionButton newSearchBotton;
     MyRecyclerViewAdapter adapter;
+    private Button logOut;
+    private Button locate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
+
+        haveServey = 0;
+        //do survey only once
+        if(haveServey == 0)
+            showList();
+
+
+        itineraries = new ArrayList<>();
         setContentView(R.layout.user_dashboard);
         location = findViewById(R.id.location);
         budget = findViewById(R.id.budget);
         startDate = findViewById(R.id.startDate);
         endDate = findViewById(R.id.endDate);
         itinerary = findViewById(R.id.itineraryRecyclerView);
-
-
-        try {
-            getItinerary();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-
         newSearchBotton = findViewById(R.id.addNSearch);
+
+        adapter = new MyRecyclerViewAdapter( itineraries);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        itinerary.setLayoutManager(layoutManager);
+        //adapter.setClickListener(this);
+        itinerary.setAdapter(adapter);
+        itinerary.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
         newSearchBotton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 attemptSearch();
             }
         });
+        logOut = findViewById(R.id.logOutButton);
+        locate = findViewById(R.id.locate);
+        Context context = this;
+
+        locate.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MyLocation myLocation = new MyLocation();
+                myLocation.basePermissionX(UserSearchActivity.this);
+                MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
+                    @Override
+                    public void gotLocation(Location location1){
+                        //Got the location!
+                        Geocoder geocoder;
+                        Address addresses = new Address(null);
+                        geocoder = new Geocoder(UserSearchActivity.this, Locale.getDefault());
+
+                        try {
+                            addresses = geocoder.getFromLocation(location1.getLatitude(), location1.getLongitude(), 1).get(0); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        String address = addresses.getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                        String city = addresses.getLocality();
+                        String state = addresses.getAdminArea();
+                        String country = addresses.getCountryName();
+                        String postalCode = addresses.getPostalCode();
+                        String knownName = addresses.getFeatureName(); // Only if available else return NULL
+                        location.setText(address.toString());
+                    }
+                };
+                //MyLocation myLocation = new MyLocation();
+                myLocation.getLocation(context, locationResult);
+
+            }
+        });
+
+        logOut.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO
+                //Intent intent = new Intent(this, LoginActivity.class);
+                //startActivity(intent);
+            }
+        });
+
+
+
 
 
 
 
     }
 
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        // GET personal itineraries
+        try {
+            getItinerary();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
     /**
 
      * get itineraries the user has saved before
@@ -98,30 +180,65 @@ public class UserSearchActivity extends Activity {
     private void getItinerary() throws JSONException {
 
         Bundle b = getIntent().getExtras();
-        String userId=b.getString("userId");
+        //String userId=b.getString("userId");
+        String userId = "yingyingying";
 
-
-        String url = "http://baidu.com";
+        String url = "https://yata-monarch.herokuapp.com/trips.json";
         Map<String, Object> param = new HashMap<>();
         param.put("userId", userId);//need to tell backend this
         //searchResult[] response_for_next = {new searchReasult()};
         List<JSONObject> searchResults = new ArrayList<>();
 
-        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.GET, url, new JSONObject(param), new Response.Listener<JSONObject>() {
+
+        JsonArrayRequest jor = new JsonArrayRequest(Request.Method.GET, url, new JSONArray(), new Response.Listener<JSONArray>() {
             @Override
-            public void onResponse(JSONObject response) {
+            public void onResponse(JSONArray response) {
 
                 try {
 
-                    JSONArray ja = response.getJSONArray("result");//need change
-                    Log.e("Detail",ja.toString());
+                    JSONArray ja = response;//need change
+
 
                     for (int i = 0; i < ja.length(); i++) {
 
                         JSONObject jsonObject =  ja.getJSONObject(i);
+                        Log.e("Detail"+i,jsonObject.toString());
                         searchResults.add(jsonObject);
                     }
                     Log.e("suncess",searchResults.toString());
+
+
+
+                    Gson gson = new GsonBuilder().create();
+
+                    JSONObject a1 = new JSONObject();
+                    a1.put("location","boston");
+                    a1.put("startDate","03/22/1999");
+                    a1.put("endDate","04/10/2020");
+                    JSONObject a2 = new JSONObject();
+                    a2.put("location","new york");
+                    a2.put("startDate","03/22/1939");
+                    a2.put("endDate","02/10/2010");
+                    searchResults.add(a1);
+                    searchResults.add(a2);
+                    for (JSONObject item : searchResults) {
+                        itineraries.add(gson.fromJson(String.valueOf(item),Itinerary.class));
+                    }
+                    for (Itinerary it : itineraries) {
+                        String tmp;
+                        tmp = it.getStartDate();
+                        if (tmp != null) {
+                            it.setStartDate(tmp.substring(0,10));
+                        }
+                        else continue;
+                        tmp = it.getEndDate();
+                        if (tmp != null) {
+                            it.setEndDate(tmp.substring(0,10));
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -131,55 +248,67 @@ public class UserSearchActivity extends Activity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley", error.getMessage());
+                        Log.e("Volley", "error");
 
                     }
                 }
         );
-//        StringRequest jor = new StringRequest(Request.Method.GET, url,
-//                new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        // Display the first 500 characters of the response string.
-//                        Log.e("success","congra");
-//                    }
-//                }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.e("Volley", "Error");
-//            }
-//        });
 
         Log.e("message","I'm here");
         RequestQueue requestQueue = Volley.newRequestQueue(UserSearchActivity.this);
-        //requestQueue.add(jor);
-        //itinerary = findViewById(R.id.itineraryRecyclerView);
-        itinerary.setLayoutManager(new LinearLayoutManager(this));
-        Gson gson = new GsonBuilder().create();
-        List<Itinerary> itineraries = new ArrayList<>();
-//        String s1 = "{\"location\":\"boston\",\"startDate\":\"03/22/1999\",\"endDate\":\"04/10/2022\"}";
-//        String s2 = "{\"location\":\"new york\",\"startDate\":\"02/11/2000\",\"endDate\":\"12/12/1999\"}";
-        JSONObject a1 = new JSONObject();
-        a1.put("location","boston");
-        a1.put("startDate","03/22/1999");
-        a1.put("endDate","04/10/2020");
-        JSONObject a2 = new JSONObject();
-        a2.put("location","new york");
-        a2.put("startDate","03/22/1939");
-        a2.put("endDate","02/10/2010");
-        searchResults.add(a1);
-        searchResults.add(a2);
-        for (JSONObject item : searchResults) {
-            itineraries.add(gson.fromJson(item.toString(), Itinerary.class));
-        }
-        Log.e("succ",itineraries.get(0).getLocation());
-        adapter = new MyRecyclerViewAdapter( itineraries);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        itinerary.setLayoutManager(layoutManager);
-        //adapter.setClickListener(this);
-        itinerary.setAdapter(adapter);
-        itinerary.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        requestQueue.add(jor);
     }
+
+    /**
+     * User Survey dialog
+     */
+    int checkedItem = 0;
+    private void showList() {
+        //默认选中的item
+        final String[] items = {"High School Student", "College Student", "I'm working"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setIcon(R.mipmap.ic_launcher)
+                .setTitle("User Survey")
+                .setCancelable(false)
+                .setSingleChoiceItems(items,checkedItem, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        checkedItem=i;
+                        //Toast.makeText(UserSearchActivity.this, "你点击的内容为： " + items[i], Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.setPositiveButton("Go!", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showThanks();
+                haveServey++;
+                Log.e("type", items[checkedItem].toString());
+            }
+        })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showThanks();
+                    }
+                });
+        builder.create().show();
+    }
+    private void showThanks(){
+        final String s ="Thank you! \n Enjoy your trip!";
+        Toast.makeText(this, s, Toast.LENGTH_LONG);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+//                .setIcon(R.mipmap.ic_launcher)
+//                .setTitle("dialog choice")
+//                .setCancelable(false)
+//                .setMessage(s);
+//        builder.setPositiveButton("go", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//            }
+//        });
+//        builder.create().show();
+    }
+
 
     /**
 
@@ -211,7 +340,7 @@ public class UserSearchActivity extends Activity {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             Itinerary itinerary = mData.get(position);
-            Log.e("holder location", itinerary.getLocation());
+            //Log.e("holder location", itinerary.getLocation());
             holder.location.setText(itinerary.getLocation());
             holder.duration.setText(itinerary.getStartDate() + "-" + itinerary.getEndDate());
         }
@@ -254,7 +383,6 @@ public class UserSearchActivity extends Activity {
     }
 
 
-
     /**
 
      * triggered by user click the search button
@@ -262,74 +390,20 @@ public class UserSearchActivity extends Activity {
      * turn to the recommendation page, pass received data to recommendation page
 
      */
+
+    //main button triggered
     private void attemptSearch() {
         String locationVal = location.getText().toString();
         String bugetVal = budget.getText().toString();
         String startDateVal = startDate.getText().toString();
         String endDateVal = endDate.getText().toString();
 
-        RequestQueue requestQueue;
-
-        // Instantiate the cache
-        Cache cache = new DiskBasedCache(getCacheDir(), 1024 * 1024); // 1MB cap
-
-        // Set up the network to use HttpURLConnection as the HTTP client.
-        Network network = new BasicNetwork(new HurlStack());
-
-        // Instantiate the RequestQueue with the cache and network.
-        requestQueue = new RequestQueue(cache, network);
-
-        // Start the queue
-        requestQueue.start();
-
-
-        String url = "http://suggest.taobao.com/sug?code=utf-8&q=商品关键字&callback=cb";//send to the database
-        Map<String, Object> param = new HashMap<>();
-        param.put("location", locationVal);//need to tell backend this
-        param.put("budget", bugetVal);
-        param.put("startDate", startDateVal);
-        param.put("endDate", endDateVal);
-        //searchResult[] response_for_next = {new searchResult()};
-        List<JSONObject> searchResults = new ArrayList<>();
-
-        JsonObjectRequest jor = new JsonObjectRequest(Request.Method.POST, url, new JSONObject(param), new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
-
-                try {
-
-                    JSONArray ja = response.getJSONArray("posts");//need change
-                    Log.e("Detail", ja.toString());
-
-                    for (int i = 0; i < ja.length(); i++) {
-
-                        JSONObject jsonObject = ja.getJSONObject(i);
-                        searchResults.add(jsonObject);
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.e("Volley", "Error");
-
-                    }
-                }
-        );
-
-
-        requestQueue.add(jor);
-
         //public PostObjectRequest(String url, Map<String,String> params,Type type, ResponseListener lis
 
 
-        Intent intent = new Intent(this, SecondActivity.class);
-        intent.putExtra("search result", searchResults.toString());
-        startActivity(intent);
+//        Intent intent = new Intent(this, SecondActivity.class);
+//        intent.putExtra("search result", searchResults.toString());
+//        startActivity(intent);
     }
 
 }
