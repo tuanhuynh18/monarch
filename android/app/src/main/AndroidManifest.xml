@@ -3,6 +3,11 @@
     package="com.example.monarch">
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Include only if your app benefits from precise location access. -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,8 +25,7 @@
 
         <activity android:name=".user_page.UserSearchActivity"
             android:theme="@style/Theme.AppCompat.Light"
-            android:parentActivityName=".MainActivity"
-            android:label="what"
+            android:label="Home Page"
             android:launchMode="singleTask"
             android:exported="true"/>
 

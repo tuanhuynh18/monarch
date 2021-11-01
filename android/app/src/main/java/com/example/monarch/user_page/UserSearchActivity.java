@@ -60,7 +60,7 @@ import java.util.Map;
  * @author Yuxin
  * @version 1.0
  */
-public class UserSearchActivity extends Activity {
+public class UserSearchActivity extends AppCompatActivity {
     private EditText location;
     private EditText budget;
     private EditText startDate;
