@@ -1,5 +1,8 @@
 package com.example.monarch.user_page;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -16,9 +19,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import com.permissionx.guolindev.PermissionX;
-
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class MyLocation {
     Timer timer1;
@@ -60,6 +60,7 @@ public class MyLocation {
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
                 Log.e("error", "gps error");
+                return false;
             }
         lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListenerGps);
         if (network_enabled)
@@ -72,6 +73,7 @@ public class MyLocation {
                 // to handle the case where the user grants the permission. See the documentation
                 // for ActivityCompat#requestPermissions for more details.
                 Log.e("error", "gps error");
+                return false;
             }
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListenerNetwork);
         timer1 = new Timer();
@@ -84,9 +86,9 @@ public class MyLocation {
                 .permissions(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION)
                 .request((allGranted, grantedList, deniedList) -> {
                     if (allGranted) {
-                        Toast.makeText(activity,"所有申请的权限都已通过", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(activity,"All permitted", Toast.LENGTH_LONG).show();
                     } else {
-                        Toast.makeText(activity, "您拒绝了如下权限："+deniedList, Toast.LENGTH_LONG).show();
+                        Toast.makeText(activity, "You denied："+deniedList, Toast.LENGTH_LONG).show();
                     }
                 });
     }

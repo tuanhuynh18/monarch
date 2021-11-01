@@ -67,9 +67,11 @@ public class UserSearchActivity extends Activity {
     private EditText endDate;
     private RecyclerView itinerary;
     private FloatingActionButton newSearchBotton;
-    MyRecyclerViewAdapter adapter;
     private Button logOut;
     private Button locate;
+    MyRecyclerViewAdapter adapter;
+    List<Itinerary> itineraries;
+    int haveServey = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
