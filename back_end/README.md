@@ -1,6 +1,6 @@
 # Admin Dashboard
 A simple admin dashboard is available at [/admin][admin] that provides a tabular way to examine the data for each
-object class. A valid user account is needed to access the admin dashboard, but a real email is not needed to sign up.
+object class.
 
 # API Documentation
 When submitting form data to the API, set the `Content-Type` and `Accepts` HTTP headers to `application/json`. Any form

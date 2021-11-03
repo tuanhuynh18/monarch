@@ -1,6 +1,6 @@
 require "test_helper"
 
-class PlacesControllerTest < ActionDispatch::IntegrationTest
+class TripPlacesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @place = places(:state_park)
   end
@@ -10,8 +10,8 @@ class PlacesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
   end
 
-  test "should get new" do
-    get new_place_url
+  test "should get show" do
+    get place_url(@place)
     assert_response :success
   end
 end

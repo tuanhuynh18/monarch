@@ -1,6 +1,6 @@
 require "test_helper"
 
-class AccommodationsControllerTest < ActionDispatch::IntegrationTest
+class TripAccommodationsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @accommodation = accommodations(:sleep_inn)
   end

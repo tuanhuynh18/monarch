@@ -1,6 +1,6 @@
 require "test_helper"
 
-class ActivitiesControllerTest < ActionDispatch::IntegrationTest
+class TripActivitiesControllerTest < ActionDispatch::IntegrationTest
   setup do
     @activity = activities(:jetski)
   end

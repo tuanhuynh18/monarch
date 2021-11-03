@@ -16,42 +16,37 @@ def _dec(min = 0, max = 100)
 end
 
 def _timestamp
-  Date.today+rand(10000)
+  Date.today+rand(10)
 end
 
 puts "Creating {Accommodations}"
 while Accommodation.count <= 30
-  acc = Accommodation.new title: _name,
-                          cost: _dec(10, 50),
-                          rating: _dec(0, 5)
+  acc = Accommodation.new title: _name, cost: _dec(10, 50), rating: _dec(0, 5)
   acc.build_address _address
   acc.save!
 end
 
 puts "Creating {Activities}"
 while Activity.count <= 30
-  act = Activity.new title: _name,
-                     cost: _dec(10, 50),
-                     rating: _dec(0, 5)
+  act = Activity.new title: _name, cost: _dec(10, 50), rating: _dec(0, 5)
   act.address = act.build_address _address
   act.save!
 end
 
 puts "Creating {Places}"
 while Place.count <= 30
-  pl = Place.new title: _name,
-                 cost: _dec(10, 50),
-                 rating: _dec(0, 5)
+  pl = Place.new title: _name, cost: _dec(10, 50), rating: _dec(0, 5)
   pl.address = pl.build_address _address
   pl.save!
 end
 
+puts "Creating {Users}"
+@bob = User.find_by(email: "bob@example.com", encrypted_password: "test123") || User.create!(email: "bob@example.com", password: "test123")
+@nancy = User.find_by(email: "nancy@example.com", encrypted_password: "test123") || User.create!(email: "nancy@example.com", password: "test123")
+
 puts "Creating {Trips}"
-while Trip.count <= 4
-  Trip.create! name: _name,
-               budget: _dec(30, 600),
-               starts_at: _timestamp,
-               ends_at: _timestamp
+while @bob.trips.count <= 2
+  @bob.trips.create! name: _name, budget: _dec(30, 600), starts_at: _timestamp, ends_at: _timestamp
 end
 
 puts "Populating {Trips}"
