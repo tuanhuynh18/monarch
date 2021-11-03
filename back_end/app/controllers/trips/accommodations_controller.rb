@@ -28,7 +28,7 @@ class Trips::AccommodationsController < ApplicationController
 
     respond_to do |format|
       if !@accommodation.nil? && @trip.save
-        format.json { render :show, status: :created, location: accommodation_url(@accommodation) }
+        format.json { render :show, status: :created, location: trip_accommodation_url(@trip, @accommodation) }
       else
         format.json { render json: @accommodation.errors, status: :unprocessable_entity }
       end
@@ -57,11 +57,11 @@ class Trips::AccommodationsController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_accommodation
-    @accommodation = Accommodation.find(params[:id])
+    @accommodation = @trip.accommodations.find(params[:id])
   end
 
   def set_trip
-    @trip = Trip.find(params[:trip_id])
+    @trip = current_user.trips.find(params[:trip_id])
   end
 
   # Only allow a list of trusted parameters through.

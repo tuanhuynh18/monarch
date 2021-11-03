@@ -23,10 +23,11 @@ class Trips::PlacesController < ApplicationController
 
   # POST /trips/:trip_id/places or /trips/:trip_id/places.json
   def create
-    @trip.places << Place.find(accommodation_params[:id])
+    @place = Place.find(accommodation_params[:id])
+    @trip.places << @place
 
     respond_to do |format|
-      if @trip.save
+      if !@place.nil? && @trip.save
         format.json { render :show, status: :created, location: trip_place_url(@trip, @place) }
       else
         format.json { render json: @place.errors, status: :unprocessable_entity }
@@ -55,12 +56,12 @@ class Trips::PlacesController < ApplicationController
 
   private
   # Use callbacks to share common setup or constraints between actions.
-  def set_accommodation
-    @place = Place.find(params[:id])
+  def set_place
+    @place = @trip.places.find(params[:id])
   end
 
   def set_trip
-    @trip = Trip.find(params[:trip_id])
+    @trip = current_user.trips.find(params[:trip_id])
   end
 
   # Only allow a list of trusted parameters through.

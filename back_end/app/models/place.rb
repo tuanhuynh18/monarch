@@ -7,6 +7,6 @@ class Place < ApplicationRecord
   validate :address
 
   validates_presence_of :title
-  validate :cost, in: { min: 0, max: 100_000 }
-  validate :rating, in: { min: 1, max: 5 }
+  validates :cost, numericality: { in: 0..1_000_000 }
+  validates :rating, numericality: { in: 0..5 }
 end

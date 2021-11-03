@@ -5,9 +5,9 @@ class Trip < ApplicationRecord
   has_and_belongs_to_many :places
   has_and_belongs_to_many :activities
 
-  validates :accommodations
-  validates :places
-  validates :activities
+  validate :accommodations
+  validate :places
+  validate :activities
 
   validates_presence_of :name
 end
