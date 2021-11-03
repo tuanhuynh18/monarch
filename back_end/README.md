@@ -1,3 +1,10 @@
+# Intro
+The API is running on Heroku at https://yata-monarch.herokuapp.com. 
+
+*Note*: Because the app runs on Heroku, the API server will go to sleep if no one is using it. This means when you make a 
+request for the first time in a while, the first request may take a long time. This delay is normal and is simply the API 
+server waking up. All requests after the first should be much faster.
+
 # Admin Dashboard
 A simple admin dashboard is available at [/admin][admin] that provides a tabular way to examine the data for each
 object class.
