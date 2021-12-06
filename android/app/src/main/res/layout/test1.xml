@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/pink"
+    >
+    <com.ashokvarma.bottomnavigation.BottomNavigationBar
+        android:id="@+id/bottom_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/summary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true">
+
+        <TextView
+            android:id="@+id/summary1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Budget"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="137dp" />
+
+        <TextView
+            android:id="@+id/summary2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/summary1"
+            app:layout_constraintStart_toStartOf="@+id/summary1"
+            app:layout_constraintTop_toBottomOf="@+id/summary1" />
+
+        <TextView
+            android:id="@+id/summary3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:text="Current Cost"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/summary1"
+            tools:layout_editor_absoluteY="0dp" />
+
+        <TextView
+            android:id="@+id/summary4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/summary3"
+            app:layout_constraintStart_toStartOf="@+id/summary3"
+            app:layout_constraintTop_toBottomOf="@+id/summary3" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/split"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/summary">
+
+        <TextView
+            android:id="@+id/split1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cost Per Person"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/split2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="amount"
+            app:layout_constraintStart_toEndOf="@+id/split1">
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/split3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="youownsb"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/split1" />
+
+        <TextView
+            android:id="@+id/split4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="amount"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/split3" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--    <ScrollView-->
+    <!--        android:id="@+id/scroll"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:fillViewport="true"-->
+    <!--        android:layout_below="@id/split"-->
+    <!--        >-->
+    <ScrollView
+        android:id="@+id/scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_below="@+id/split"
+        >
+
+        <!--        <RelativeLayout-->
+        <!--            android:id="@+id/test2"-->
+        <!--            android:layout_width="fill_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--             >-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/title2"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@+id/activity_list"-->
+        <!--                android:text="Other Activities: Swipe to Edit"-->
+        <!--                android:textSize="20dp"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textStyle="bold"/>-->
+
+        <!--            <ImageView-->
+        <!--                android:id="@+id/title1_icon"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_alignParentStart="true"-->
+        <!--                android:src="@drawable/baseline_hotel_black_36dp" />-->
+
+        <!--            <TextView-->
+        <!--                android:id="@+id/title1"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_toRightOf="@id/title1_icon"-->
+        <!--                android:text="accommodations"-->
+        <!--                android:textColor="@color/black"-->
+        <!--                android:textSize="20dp"-->
+        <!--                android:textStyle="bold" />-->
+
+        <!--            <androidx.recyclerview.widget.RecyclerView-->
+        <!--                android:id="@+id/accomodation_list"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@+id/title1"-->
+        <!--                android:textSize="5dp" />-->
+
+        <!--            <androidx.recyclerview.widget.RecyclerView-->
+        <!--                android:id="@+id/activity_list"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@+id/place_list"-->
+        <!--                android:textSize="5dp"/>-->
+
+        <!--            <androidx.recyclerview.widget.RecyclerView-->
+        <!--                android:id="@+id/place_list"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@+id/accomodation_list"-->
+        <!--                android:textSize="5dp"/>-->
+
+        <!--            <com.baoyz.swipemenulistview.SwipeMenuListView-->
+        <!--                android:id="@+id/user_enter_list1"-->
+        <!--                android:layout_width="match_parent"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_below="@+id/title2"></com.baoyz.swipemenulistview.SwipeMenuListView>-->
+
+        <!--            <Switch-->
+        <!--                android:id="@+id/switch1"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:layout_alignEnd="@+id/title1"-->
+        <!--                android:layout_alignParentEnd="true"-->
+        <!--                android:text="Open" />-->
+        <!--        </RelativeLayout>-->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/acc_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_hotel_black_36dp"></ImageView>
+
+            <TextView
+                android:id="@+id/acc_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/acc_icon"
+                android:text="accommodations"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold"></TextView>
+
+
+            <Switch
+                android:id="@+id/switch_accommodation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_toRightOf="@id/acc_title" />
+            <com.baoyz.swipemenulistview.SwipeMenuListView
+                android:id="@+id/accommodation_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/acc_title"></com.baoyz.swipemenulistview.SwipeMenuListView>
+
+
+            <ImageView
+                android:layout_below="@id/accommodation_list"
+                android:id="@+id/other_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/baseline_playlist_add_black_36dp"></ImageView>
+
+            <TextView
+                android:id="@+id/other_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/other_icon"
+                android:text="Other activities"
+                android:textColor="@color/black"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:layout_below="@id/accommodation_list"></TextView>
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/accommodation_list"
+                android:layout_alignParentEnd="true"
+                android:layout_toLeftOf="@+id/other_icon"
+                android:text="Open" />
+
+            <com.baoyz.swipemenulistview.SwipeMenuListView
+                android:id="@+id/user_enter_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/other_title"></com.baoyz.swipemenulistview.SwipeMenuListView>
+
+
+
+
+
+            <!--                <RelativeLayout-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content">-->
+
+            <!--                    <com.baoyz.swipemenulistview.SwipeMenuListView-->
+            <!--                        android:id="@+id/user_enter_list1"-->
+            <!--                        android:layout_width="match_parent"-->
+            <!--                        android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>-->
+
+            <!--                    <Button-->
+            <!--                        android:id="@+id/addButton1"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_below="@id/user_enter_list1"-->
+            <!--                        android:text="add" />-->
+
+            <!--                </RelativeLayout>-->
+
+            <!--            </fragment>-->
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+</RelativeLayout>

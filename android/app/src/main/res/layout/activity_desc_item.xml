@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="30dp">
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_id"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_centerHorizontal="true"-->
+    <!--        android:background="#FFFFFFFF"-->
+    <!--        android:gravity="center"-->
+    <!--        android:padding="4dp"-->
+    <!--        android:text="玩android2群" />-->
+
+    <!--    <View-->
+    <!--        android:layout_width="0.5dp"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_alignParentRight="true"-->
+    <!--        android:background="#BCBCBC" />-->
+
+    <!--    <View-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="0.5dp"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:background="#BCBCBC" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_payer"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="TextView"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent"-->
+    <!--        tools:layout_editor_absoluteX="353dp" />-->
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/item_cost"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="TextView"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/item_id"-->
+    <!--        tools:layout_editor_absoluteY="12dp" />-->
+    <!--</androidx.constraintlayout.widget.ConstraintLayout>-->
+
+
+    <!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--    xmlns:tools="http://schemas.android.com/tools"-->
+    <!--    android:layout_width="match_parent"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:padding="20dp">-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/iv_icon"-->
+    <!--        android:layout_width="50dp"-->
+    <!--        android:layout_height="50dp"-->
+    <!--        android:src="@drawable/ic_launcher" />-->
+
+    <TextView
+        android:id="@+id/item_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="item"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_cost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="cost"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="@+id/item_payer"
+        app:layout_constraintStart_toStartOf="@+id/item_id"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/item_payer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        android:text="people"
+        android:textColor="@android:color/black"
+        android:textSize="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+<!--</RelativeLayout>-->

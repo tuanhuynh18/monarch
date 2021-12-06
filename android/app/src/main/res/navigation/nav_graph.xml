@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainActivity">
+
+    <activity
+        android:id="@+id/budgetPageActivity"
+        android:name="com.example.usr_page_test.user_page.Activity.BudgetPageActivity"
+        android:label="BudgetPageActivity" />
+
+
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="com.example.usr_page_test.user_page.Activity.MainActivity"
+        android:label="MainActivity"/>
+    <fragment
+        android:id="@+id/budgetListFragment_Accommodation"
+        android:name="com.example.usr_page_test.user_page.BudgetListFragment_Accommodation"
+        android:label="BudgetListFragment_Accommodation" />
+
+
+</navigation>
