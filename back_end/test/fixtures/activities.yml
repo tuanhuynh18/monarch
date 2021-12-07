@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+jetski:
+  title: Jetski
+  cost: 49.99
+  rating: 4.3
+
+parachuting:
+  title: Parachuting
+  cost: 999.99
+  rating: 4.9

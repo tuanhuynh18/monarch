@@ -1,0 +1,13 @@
+## Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+sleep_inn:
+  title: Sleep Inn
+  cost: 59.99
+  rating: 3.4
+  trip: spring_break
+
+best_western:
+  title: Best Western
+  cost: 69.99
+  rating: 4.9
+  trip: winter_break

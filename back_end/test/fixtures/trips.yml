@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+winter_break:
+  name: Winter Break
+  user: bob
+  budget: 100
+  starts_at: 2021-10-19 17:21:29
+  ends_at: 2021-10-19 17:21:29
+
+spring_break:
+  name: Spring Break
+  user: bob
+  budget: 322
+  starts_at: 2021-10-19 17:21:29
+  ends_at: 2021-10-19 17:21:29

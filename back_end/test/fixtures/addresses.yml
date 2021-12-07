@@ -1,0 +1,49 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+activity_one:
+  line1: 2 Example Way
+  line2: Activity 1
+  city: Atlanta
+  state: Georgia
+  zip: 30332
+  addressable: jetski (Activity)
+
+activity_two:
+  line1: 2 Example Way
+  line2: Activity 2
+  city: Atlanta
+  state: Georgia
+  zip: 30332
+  addressable: parachuting (Activity)
+
+accommodation_one:
+  line1: 2 Example Way
+  line2: Accommodation 1
+  city: Atlanta
+  state: Georgia
+  zip: 30332
+  addressable: sleep_inn (Accommodation)
+
+accommodation_two:
+  line1: 2 Example Way
+  line2: Accommodation 2
+  city: Atlanta
+  state: Georgia
+  zip: 30332
+  addressable: best_western (Accommodation)
+
+place_one:
+  line1: 2 Example Way
+  line2: Place 1
+  city: Atlanta
+  state: Georgia
+  zip: 30332
+  addressable: state_park (Place)
+
+place_two:
+  line1: 2 Example Way
+  line2: Place 2
+  city: Atlanta
+  state: Georgia
+  zip: 30332
+  addressable: caves (Place)

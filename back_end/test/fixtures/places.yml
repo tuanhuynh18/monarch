@@ -1,0 +1,11 @@
+## Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+state_park:
+  title: State Park
+  cost: 19.99
+  rating: 4.1
+
+caves:
+  title: Caves
+  cost: 9.99
+  rating: 3.2

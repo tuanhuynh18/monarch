@@ -1,0 +1,1884 @@
+{
+	"info": {
+		"_postman_id": "605a90d6-44f8-4e7a-8ff5-3b063870831b",
+		"name": "YATA",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Sign Up",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"value": "{{csrf-token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"user\" : { \"email\" : \"{{EMAIL}}\", \"password\" : \"{{PASSWORD}}\"}}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/users.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"users.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign In",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest",
+								"disabled": true
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"user\" : { \"email\" : \"{{EMAIL}}\", \"password\" : \"{{PASSWORD}}\"}}"
+						},
+						"url": {
+							"raw": "{{T_URL}}/users/sign_in.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"users",
+								"sign_in.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign Out",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"value": "XMLHttpRequest",
+								"type": "text"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"value": "{{csrf-token}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{T_URL}}/users/sign_out.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"users",
+								"sign_out.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Trips",
+			"item": [
+				{
+					"name": "Accommodations for Trip",
+					"item": [
+						{
+							"name": "All Accom. for Trip",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/accommodations.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"accommodations.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Accom. by  ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/accommodations/22.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"accommodations",
+										"22.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Accom. for Trip",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"accommodation\" : { \n        \"title\" : \"Hostel 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/accommodations.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"accommodations.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Accom.",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"accommodation\" : { \n        \"cost\" : 1022.31\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/accommodations/3.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"accommodations",
+										"3.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Accom. by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/accommodations/2.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"accommodations",
+										"2.json"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Activities for Trip",
+					"item": [
+						{
+							"name": "All Activities for Trip",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Requested-With",
+										"value": "XMLHttpRequest",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/activities.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"activities.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Activity by ID",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "X-Requested-With",
+										"value": "XMLHttpRequest",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/activities/1.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"activities",
+										"1.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Activity for Trip",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"activity\" : { \n        \"title\" : \"Run a marathon\",\n        \"cost\" : 13.31,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/activities.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"activities.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Activity",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"activity\" : { \n        \"title\" : \"Update Activity Name\",\n        \"cost\" : 1.03\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/activities/1.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"activities",
+										"1.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Activity by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/activities/2.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"activities",
+										"2.json"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Places for Trip",
+					"item": [
+						{
+							"name": "All Places for Trip",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/places.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"places.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Place by  ID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/places/1.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"places",
+										"1.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Place for Trip",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"place\" : { \n        \"title\" : \"Place 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/places.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"places.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Edit Place",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"disabled": true
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{ \n    \"place\" : { \n        \"title\" : \"Update Place Name\",\n        \"cost\" : 15.3\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/places/1.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"places",
+										"1.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Place by ID",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Content-Type is present\", function () {",
+											"    pm.response.to.have.header(\"Content-Type\");",
+											"});",
+											"",
+											"pm.test(\"Set-Cookie is present\", function () {",
+											"    pm.response.to.have.header(\"Set-Cookie\");",
+											"});",
+											"",
+											"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+											"pm.environment.set(\"session-cookie\", session_cookie);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "X-Requested-With",
+										"type": "text",
+										"value": "XMLHttpRequest"
+									},
+									{
+										"key": "X-CSRF-Token",
+										"type": "text",
+										"value": "{{csrf-token}}",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{T_URL}}/trips/1/accommodations/2.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"accommodations",
+										"2.json"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "All Trips",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/trips.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"trips.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trip by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/trips/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"trips",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"trip\" : { \n        \"name\" : \"Study Abroad\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/trips.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"trips.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Trip",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"trip\" : { \n        \"name\" : \"Update Trip Name\",\n        \"budget\" : 102.31\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/trips/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"trips",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{T_URL}}/trips/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"trips",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "All Accommodations",
+			"item": [
+				{
+					"name": "All Accom.",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/accommodations.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"accommodations.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Accom. by  ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/accommodations/22.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"accommodations",
+								"22.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Accom.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"accommodation\" : { \n        \"title\" : \"Hostel 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/accommodations.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"accommodations.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Accom.",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"accommodation\" : { \n        \"cost\" : 1022.31\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/accommodations/3.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"accommodations",
+								"3.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Accom. by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{T_URL}}/accommodations/2.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"accommodations",
+								"2.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "All Places",
+			"item": [
+				{
+					"name": "All Places",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/places.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"places.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Places by  ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/places/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"places",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Place",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"place\" : { \n        \"title\" : \"Museum 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/places.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"places.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Place",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"place\" : { \n        \"cost\" : 1022.31\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/places/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"places",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Place by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{T_URL}}/places/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"places",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "All Activities",
+			"item": [
+				{
+					"name": "All Activities",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/activities.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"activities.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activities by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{T_URL}}/activities/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"activities",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Activities",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"activity\" : { \n        \"title\" : \"Activity 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/activities.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"activities.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Activity",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n    \"activity\" : { \n        \"cost\" : 1022.31\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{T_URL}}/activities/3.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"activities",
+								"3.json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Accom. by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Content-Type is present\", function () {",
+									"    pm.response.to.have.header(\"Content-Type\");",
+									"});",
+									"",
+									"pm.test(\"Set-Cookie is present\", function () {",
+									"    pm.response.to.have.header(\"Set-Cookie\");",
+									"});",
+									"",
+									"var session_cookie = pm.response.headers.get(\"Set-Cookie\");",
+									"pm.environment.set(\"session-cookie\", session_cookie);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Requested-With",
+								"type": "text",
+								"value": "XMLHttpRequest"
+							},
+							{
+								"key": "X-CSRF-Token",
+								"type": "text",
+								"value": "{{csrf-token}}",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{T_URL}}/activities/1.json",
+							"host": [
+								"{{T_URL}}"
+							],
+							"path": [
+								"activities",
+								"1.json"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
