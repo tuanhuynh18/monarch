@@ -3,7 +3,7 @@ package com.example.monarch.data;
 import java.util.ArrayList;
 
 public class Trip {
-    private ArrayList<Place> mPlaces;
+    private ArrayList<MyPlace> mMyPlaces;
     private String mCity;
     private String mStartDate;
     private String mEndDate;

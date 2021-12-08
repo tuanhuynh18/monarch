@@ -54,7 +54,7 @@ public class LoginActivity extends AppCompatActivity {
                 JSONObject body = new JSONObject();
                 try {
                     loginData.put("email", mUsername.getText());
-                    loginData.put("password", mPassword.getText());
+                     loginData.put("password", mPassword.getText());
                     body.put("user", loginData);
                 } catch (JSONException e) {
                     e.printStackTrace();

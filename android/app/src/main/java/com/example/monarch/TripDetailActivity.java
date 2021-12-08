@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.animation.ObjectAnimator;
@@ -16,22 +17,19 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
+import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.monarch.data.MyPlace;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -41,7 +39,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
@@ -163,7 +160,16 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
 
+            // recyclerview
+            ArrayList<MyPlace> places = new ArrayList<>();
+            places.add(new MyPlace("Hongkong supermarket", "123 Atl street", 100));
+            places.add(new MyPlace("Time square", "456 New York blv", 200));
+            places.add(new MyPlace("Chocolate factory", "248 Garden Grove CA", 300));
 
+            RecyclerView recyclerView = findViewById(R.id.trip_item_list_recycler_view);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            PlaceAdapder adapter = new PlaceAdapder(this, places);
+            recyclerView.setAdapter(adapter);
         }
     }
 
@@ -359,6 +365,63 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
         // Move the camera instantly to Sydney with a zoom of 15.
         moveCamera(currentLocation, DEFAULT_MAP_ZOOM, "My location");
+    }
+
+    // recyclerview
+    private class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private MyPlace mPlace;
+
+        private TextView mPlaceName;
+        private TextView mPlaceAddress;
+        private TextView mEstimatedCost;
+
+        public PlaceHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.list_item_place, parent, false));
+            itemView.setOnClickListener(this);
+
+            mPlaceName = (TextView) itemView.findViewById(R.id.place_name);
+            mPlaceAddress = (TextView) itemView.findViewById(R.id.place_address);
+            mEstimatedCost = (TextView) itemView.findViewById(R.id.place_true_cost);
+        }
+
+        public void bind(MyPlace place) {
+            mPlace = place;
+            mPlaceName.setText(mPlace.getName());
+            mPlaceAddress.setText(mPlace.getAddress());
+            mEstimatedCost.setText("$" + mPlace.getEstimatedCost());
+        }
+
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+            startActivity(intent);
+        }
+    }
+
+    private class PlaceAdapder extends RecyclerView.Adapter<PlaceHolder> {
+        private ArrayList<MyPlace> mPlaces;
+        private Context mContext;
+        public PlaceAdapder(Context context, ArrayList<MyPlace> places) {
+            mPlaces = places;
+            mContext = context;
+        }
+
+        @Override
+        public PlaceHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            return new PlaceHolder(layoutInflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(PlaceHolder holder, int position) {
+            MyPlace place = mPlaces.get(position);
+            holder.bind(place);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mPlaces.size();
+        }
     }
 }
 
