@@ -78,7 +78,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mGoogleMap;
 //    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
