@@ -1,19 +1,26 @@
 package com.example.monarch;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -21,13 +28,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.monarch.API.RequestQueueSingleton;
+import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.util.ArrayList;
 import java.util.Locale;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -103,6 +113,17 @@ public class UserPageActivity extends AppCompatActivity {
             authFailureError.printStackTrace();
         }
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(getTripsRequest);
+
+        // recyclerview
+        ArrayList<Trip> trips = new ArrayList<>();
+        trips.add(new Trip("boston", "01/01/2021","01/05/2021", 100));
+        trips.add(new Trip("ATL", "11/01/2021","11/05/2021", 200));
+        trips.add(new Trip("LA", "03/01/2021","03/05/2021", 300));
+
+        RecyclerView recyclerView = findViewById(R.id.itinerary_recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        TripAdapder adapter = new TripAdapder(this, trips);
+        recyclerView.setAdapter(adapter);
     }
 
     private void updateLabel(EditText editText) {
@@ -123,5 +144,61 @@ public class UserPageActivity extends AppCompatActivity {
             }
         });
         return datePickerDialog;
+    }
+
+    // recyclerview
+    private class TripHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private Trip mTrip;
+
+        private TextView mCity;
+        private TextView mDate;
+        private TextView mBudget;
+
+        public TripHolder(LayoutInflater inflater, ViewGroup parent) {
+            super(inflater.inflate(R.layout.list_item_trip, parent, false));
+            itemView.setOnClickListener(this);
+
+            mCity = (TextView) itemView.findViewById(R.id.trip_city);
+            mDate = (TextView) itemView.findViewById(R.id.trip_date);
+            mBudget = (TextView) itemView.findViewById(R.id.trip_budget);
+        }
+
+        public void bind(Trip trip) {
+            mTrip = trip;
+            mCity.setText(mTrip.getCity());
+            mDate.setText(mTrip.getStartEndDate());
+            mBudget.setText("$" + mTrip.getBudget());
+        }
+
+        @Override
+        public void onClick(View v) {
+
+        }
+    }
+
+    private class TripAdapder extends RecyclerView.Adapter<TripHolder> {
+        private ArrayList<Trip> mTrips;
+        private Context mContext;
+        public TripAdapder(Context context, ArrayList<Trip> trips) {
+            mTrips = trips;
+            mContext = context;
+        }
+
+        @Override
+        public TripHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            return new TripHolder(layoutInflater, parent);
+        }
+
+        @Override
+        public void onBindViewHolder(TripHolder holder, int position) {
+            Trip trip = mTrips.get(position);
+            holder.bind(trip);
+        }
+
+        @Override
+        public int getItemCount() {
+            return mTrips.size();
+        }
     }
 }
