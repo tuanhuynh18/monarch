@@ -9,18 +9,31 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.monarch.API.RequestQueueSingleton;
+import com.example.monarch.data.User;
 import com.google.android.material.datepicker.MaterialDatePicker;
 
+import org.json.JSONObject;
+
+import java.net.CookieHandler;
+import java.net.CookieManager;
 import java.util.Locale;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class UserPageActivity extends AppCompatActivity {
     private static final Calendar myCalendar = Calendar.getInstance();
+    private static final String TAG = "UserPage";
 
     private EditText mStartDateEditText;
     private EditText mEndDateEditText;
@@ -68,6 +81,28 @@ public class UserPageActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // fetch itinerary
+        String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_places_endpoint);
+        JsonObjectRequest getTripsRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "Fetch trip data successfully" + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        try {
+            Log.d(TAG, "Request header" + getTripsRequest.getHeaders().toString() + getTripsRequest.toString());
+        } catch (AuthFailureError authFailureError) {
+            authFailureError.printStackTrace();
+        }
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(getTripsRequest);
     }
 
     private void updateLabel(EditText editText) {
