@@ -41,12 +41,17 @@ while Place.count <= 30
 end
 
 puts "Creating {Users}"
-@bob = User.find_by(email: "bob@example.com", encrypted_password: "test123") || User.create!(email: "bob@example.com", password: "test123")
-@nancy = User.find_by(email: "nancy@example.com", encrypted_password: "test123") || User.create!(email: "nancy@example.com", password: "test123")
+@bob = User.find_by(email: "bob@example.com") || User.create!(email: "bob@example.com", password: "test123")
+@nancy = User.find_by(email: "nancy@example.com") || User.create!(email: "nancy@example.com", password: "test123")
 
 puts "Creating {Trips}"
 while @bob.trips.count <= 2
-  @bob.trips.create! name: _name, budget: _dec(30, 600), starts_at: _timestamp, ends_at: _timestamp
+  t = Trip.new name: _name, budget: _dec(30, 600),
+               starts_at: _timestamp, ends_at: _timestamp,
+               user: @bob
+  t.save!
+
+  Invite.create!(sender: @bob, receiver: @nancy, status: :accepted, trip: t)
 end
 
 puts "Populating {Trips}"
@@ -61,4 +66,9 @@ Trip.all.each do |trip|
     trip.accommodations << Accommodation.find(Accommodation.pluck(:id).sample)
   end
   trip.save!
+end
+
+obj = [ User, Trip, Activity, Accommodation, Place, Invite, Address ]
+obj.each do |o|
+  puts "#{o}: #{o.count}"
 end

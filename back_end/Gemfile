@@ -61,3 +61,5 @@ end
 gem 'devise', github: "ghiculescu/devise", branch: "patch-2"
 gem 'faker'
 gem 'administrate'
+
+gem 'active_record_union'
