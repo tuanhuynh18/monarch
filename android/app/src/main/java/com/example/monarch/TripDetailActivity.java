@@ -29,7 +29,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
+import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
@@ -42,10 +48,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.AddressComponent;
+import com.google.android.libraries.places.api.model.AddressComponents;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,6 +87,8 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private boolean mLocationPermissionGranted = false;
     private int mMapLayoutState = 0; // 0 = contract, 1 = expand
     private GoogleMap mGoogleMap;
+    RecyclerView mRecyclerView;
+    PlaceAdapder mAdapter;
 //    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
 
     @Override
@@ -113,7 +127,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
             // Specify the types of place data to return.
-            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME));
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS, Place.Field.PRICE_LEVEL));
 
             // Set up a PlaceSelectionListener to handle the response.
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -121,7 +135,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 public void onPlaceSelected(@NonNull Place place) {
                     // TODO: Get info about the selected place.
                     Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
-                    Log.i(TAG, "Place: " + place);
+                    Log.i(TAG, "Place: " + place.toString());
+                    Log.i(TAG, "address components: " + place.getAddressComponents());
+                    // add place to backend and frontend
+                    addPlace(place);
                     LatLng latLong = place.getLatLng();
                     String name = place.getName();
                     moveCamera(latLong, DEFAULT_MAP_ZOOM, name);
@@ -134,8 +151,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     Log.i(TAG, "An error occurred: " + status);
                 }
             });
-
-
 
 //            mSearchText = findViewById(R.id.input_search);
 //            mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -167,11 +182,45 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 places = new ArrayList<MyPlace>();
                 User.getUserInstance().getChosenTrip().setPlaces(places);
             }
-            RecyclerView recyclerView = findViewById(R.id.trip_item_list_recycler_view);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            PlaceAdapder adapter = new PlaceAdapder(this, places);
-            recyclerView.setAdapter(adapter);
+            mRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mAdapter = new PlaceAdapder(this, places);
+            mRecyclerView.setAdapter(mAdapter);
         }
+    }
+
+    private void addPlace(Place place) {
+        MyPlace new_place = new MyPlace(place);
+
+        Gson gson = new Gson();
+        JSONObject body = null;
+        try {
+            body = new JSONObject(gson.toJson(new_place));
+            Log.d(TAG, body.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_places_endpoint);
+
+        JsonObjectRequest addPlaceRequest = new JsonObjectRequest
+                (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "Add trip successfully");
+                        User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
+                        mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
+                        mRecyclerView.setAdapter(mAdapter);
+                        Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
+                        startActivity(intent);
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(addPlaceRequest);
     }
 
     private void geoLocate(){

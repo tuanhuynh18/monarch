@@ -1,5 +1,10 @@
 package com.example.monarch.data;
 
+import com.google.android.libraries.places.api.model.AddressComponent;
+import com.google.android.libraries.places.api.model.Place;
+
+import java.util.List;
+
 public class MyPlace {
     private int id;
     private String title;
@@ -8,14 +13,22 @@ public class MyPlace {
     private String description;
     private String note;
     private String google_id;
-    private int latitude;
-    private int longitude;
+    private double latitude;
+    private double longitude;
 
-    private int mEstimatedCost;
-    private String mName;
-    public MyPlace(String name, String address, int cost) {
-        mEstimatedCost = cost;
-        mName = name;
+    private int estimated_cost;
+
+    public MyPlace(Place place) {
+        List<AddressComponent> listAddressComponents = place.getAddressComponents().asList();
+        address = new Address(listAddressComponents);
+        google_id = place.getId();
+        int priceLevel = place.getPriceLevel() != null ? place.getPriceLevel() : 1;
+        estimated_cost = priceLevel * CostOfLiving.AVERAGE_COST_OF_LIVING.get(address.getCity());
+        latitude = place.getLatLng().latitude;
+        longitude = place.getLatLng().longitude;
+        note = "";
+        description = "";
+        title = place.getName();
     }
 
     public int getId() {
@@ -70,7 +83,7 @@ public class MyPlace {
         this.google_id = google_id;
     }
 
-    public int getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
@@ -78,7 +91,7 @@ public class MyPlace {
         this.latitude = latitude;
     }
 
-    public int getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
@@ -86,36 +99,23 @@ public class MyPlace {
         this.longitude = longitude;
     }
 
-    public int getmEstimatedCost() {
-        return mEstimatedCost;
+    public int getEstimated_cost() {
+        return estimated_cost;
     }
 
-    public void setmEstimatedCost(int mEstimatedCost) {
-        this.mEstimatedCost = mEstimatedCost;
-    }
-
-    public String getmName() {
-        return mName;
-    }
-
-    public void setmName(String mName) {
-        this.mName = mName;
+    public void setEstimated_cost(int estimated_cost) {
+        this.estimated_cost = estimated_cost;
     }
 
     public int getEstimatedCost() {
-        return mEstimatedCost;
+        return estimated_cost;
     }
 
     public void setEstimatedCost(int mEstimatedCost) {
-        this.mEstimatedCost = mEstimatedCost;
-    }
-
-    public String getName() {
-        return mName;
+        this.estimated_cost = mEstimatedCost;
     }
 
     public void setName(String mName) {
-        this.mName = mName;
     }
 
     public Address getAddress() {
