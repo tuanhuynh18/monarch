@@ -5,6 +5,7 @@ class TripsController < ApplicationController
   # GET /trips or /trips.json
   def index
     @trips = current_user.trips.all
+    head :not_found if @trips.nil?
   end
 
   # GET /trips/1 or /trips/1.json
@@ -22,7 +23,8 @@ class TripsController < ApplicationController
 
   # POST /trips or /trips.json
   def create
-    @trip = current_user.trips.build(trip_params)
+    @trip = Trip.new(trip_params)
+    @trip.user = current_user
 
     respond_to do |format|
       if @trip.save
@@ -60,7 +62,8 @@ class TripsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_trip
-      @trip = current_user.trips.find(params[:trip_id] || params[:id])
+      @trip = current_user.trips.find_by_id(params[:trip_id] || params[:id])
+      head :not_found if @trip.nil?
     end
 
     # Only allow a list of trusted parameters through.
@@ -68,3 +71,4 @@ class TripsController < ApplicationController
       params.require(:trip).permit(:name, :budget, :starts_at, :ends_at)
     end
 end
+

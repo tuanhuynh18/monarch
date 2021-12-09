@@ -205,13 +205,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{T_URL}}/trips/1/accommodations.json",
+									"raw": "{{T_URL}}/trips/732/accommodations.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"732",
 										"accommodations.json"
 									]
 								}
@@ -224,13 +224,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{T_URL}}/trips/1/accommodations/22.json",
+									"raw": "{{T_URL}}/trips/4/accommodations/22.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"4",
 										"accommodations",
 										"22.json"
 									]
@@ -239,7 +239,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Accom. for Trip",
+							"name": "Assign Accom. to Trip by ID",
 							"event": [
 								{
 									"listen": "test",
@@ -287,7 +287,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{ \n    \"accommodation\" : { \n        \"title\" : \"Hostel 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+									"raw": "{ \n    \"accommodation\" : { \"id\" : 33 }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -295,16 +295,17 @@
 									}
 								},
 								"url": {
-									"raw": "{{T_URL}}/trips/1/accommodations.json",
+									"raw": "{{T_URL}}/trips/732/accommodations.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"732",
 										"accommodations.json"
 									]
-								}
+								},
+								"description": "Assigns an existing Accommodation to the given Trip."
 							},
 							"response": []
 						},
@@ -380,7 +381,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete Accom. by ID",
+							"name": "Remove Accom. from Trip",
 							"event": [
 								{
 									"listen": "test",
@@ -456,13 +457,13 @@
 									}
 								],
 								"url": {
-									"raw": "{{T_URL}}/trips/1/activities.json",
+									"raw": "{{T_URL}}/trips/732/activities.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"732",
 										"activities.json"
 									]
 								}
@@ -496,7 +497,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Activity for Trip",
+							"name": "Assign Activity to Trip by ID",
 							"event": [
 								{
 									"listen": "test",
@@ -544,7 +545,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{ \n    \"activity\" : { \n        \"title\" : \"Run a marathon\",\n        \"cost\" : 13.31,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+									"raw": "{ \n    \"activity\" : { \"id\" : 34 }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -552,16 +553,17 @@
 									}
 								},
 								"url": {
-									"raw": "{{T_URL}}/trips/1/activities.json",
+									"raw": "{{T_URL}}/trips/732/activities.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"732",
 										"activities.json"
 									]
-								}
+								},
+								"description": "Assigns an existing Activity to the given Trip."
 							},
 							"response": []
 						},
@@ -622,13 +624,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{T_URL}}/trips/1/activities/1.json",
+									"raw": "{{T_URL}}/trips/4/activities/1.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"4",
 										"activities",
 										"1.json"
 									]
@@ -637,7 +639,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete Activity by ID",
+							"name": "Remove Activity from Trip",
 							"event": [
 								{
 									"listen": "test",
@@ -726,13 +728,13 @@
 								"method": "GET",
 								"header": [],
 								"url": {
-									"raw": "{{T_URL}}/trips/1/places/1.json",
+									"raw": "{{T_URL}}/trips/4/places/1.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"4",
 										"places",
 										"1.json"
 									]
@@ -741,7 +743,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Place for Trip",
+							"name": "Assign Place to Trip by ID",
 							"event": [
 								{
 									"listen": "test",
@@ -789,7 +791,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{ \n    \"place\" : { \n        \"title\" : \"Place 1\",\n        \"cost\" : 21.32,\n        \"address_attributes\" : { \"line1\" : \"123 Example Lane\", \"city\" : \"Springfield\", \"state\" : \"WA\", \"zip\": 12323 }\n    }\n}",
+									"raw": "{ \n    \"place\" : { \"id\" : 34 }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -797,16 +799,17 @@
 									}
 								},
 								"url": {
-									"raw": "{{T_URL}}/trips/1/places.json",
+									"raw": "{{T_URL}}/trips/732/places.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"1",
+										"732",
 										"places.json"
 									]
-								}
+								},
+								"description": "Assigns an existing Place to the given Trip."
 							},
 							"response": []
 						},
@@ -882,7 +885,7 @@
 							"response": []
 						},
 						{
-							"name": "Delete Place by ID",
+							"name": "Remove Place from Trip",
 							"event": [
 								{
 									"listen": "test",
@@ -940,6 +943,106 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "All Places for Trip Copy",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{T_URL}}/trips/4/places.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"4",
+										"places.json"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Invites",
+					"item": [
+						{
+							"name": "All Invites For Trip",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{T_URL}}/trips/732/invites.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"732",
+										"invites.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invite User by Email",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invite\" : {\n        \"receiver_email\" : \"test-user3@example.com\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/732/invites.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"732",
+										"invites.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Revoke Access to Trip",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"invite\" : {\n        \"status\" : \"revoked\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/2/invites/2.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"2",
+										"invites",
+										"2.json"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -966,13 +1069,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{T_URL}}/trips/1.json",
+							"raw": "{{T_URL}}/trips/732.json",
 							"host": [
 								"{{T_URL}}"
 							],
 							"path": [
 								"trips",
-								"1.json"
+								"732.json"
 							]
 						}
 					},
@@ -1103,13 +1206,13 @@
 							}
 						},
 						"url": {
-							"raw": "{{T_URL}}/trips/1.json",
+							"raw": "{{T_URL}}/trips/5.json",
 							"host": [
 								"{{T_URL}}"
 							],
 							"path": [
 								"trips",
-								"1.json"
+								"5.json"
 							]
 						}
 					},
@@ -1684,7 +1787,7 @@
 					"response": []
 				},
 				{
-					"name": "Create Activities",
+					"name": "Create Activity",
 					"event": [
 						{
 							"listen": "test",
@@ -1879,6 +1982,24 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "All Pending Invites",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{T_URL}}/invites/pending.json",
+					"host": [
+						"{{T_URL}}"
+					],
+					"path": [
+						"invites",
+						"pending.json"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }
