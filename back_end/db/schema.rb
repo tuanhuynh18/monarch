@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_03_221912) do
+ActiveRecord::Schema.define(version: 2021_12_09_030248) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -87,7 +87,11 @@ ActiveRecord::Schema.define(version: 2021_11_03_221912) do
     t.bigint "addressable_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.decimal "latitude"
+    t.decimal "longitude"
+    t.integer "google_id"
     t.index ["addressable_type", "addressable_id"], name: "index_places_on_addressable"
+    t.index ["google_id"], name: "index_places_on_google_id"
   end
 
   create_table "places_trips", id: false, force: :cascade do |t|
@@ -103,6 +107,7 @@ ActiveRecord::Schema.define(version: 2021_11_03_221912) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "user_id", null: false
+    t.string "destination"
     t.index ["user_id"], name: "index_trips_on_user_id"
   end
 

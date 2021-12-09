@@ -37,6 +37,8 @@ puts "Creating {Places}"
 while Place.count <= 30
   pl = Place.new title: _name, cost: _dec(10, 50), rating: _dec(0, 5)
   pl.address = pl.build_address _address
+  pl.latitude  = _dec(-180, 180)
+  pl.longitude = _dec(-180, 180)
   pl.save!
 end
 
@@ -48,7 +50,7 @@ puts "Creating {Trips}"
 while @bob.trips.count <= 2
   t = Trip.new name: _name, budget: _dec(30, 600),
                starts_at: _timestamp, ends_at: _timestamp,
-               user: @bob
+               user: @bob, destination: _name
   t.save!
 
   Invite.create!(sender: @bob, receiver: @nancy, status: :accepted, trip: t)
