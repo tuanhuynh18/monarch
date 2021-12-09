@@ -26,12 +26,19 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.monarch.API.RequestQueueSingleton;
+import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
@@ -44,10 +51,15 @@ import java.util.Locale;
 public class UserPageActivity extends AppCompatActivity {
     private static final Calendar myCalendar = Calendar.getInstance();
     private static final String TAG = "UserPage";
-
+    // widgets
     private EditText mStartDateEditText;
     private EditText mEndDateEditText;
     private Button mCreateTripButton;
+    private EditText mTripNameEditText;
+    private EditText mBudgetEditText;
+    private TripAdapder mAdapter;
+    RecyclerView mRecyclerView;
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,8 @@ public class UserPageActivity extends AppCompatActivity {
         mStartDateEditText = findViewById(R.id.input_start_date_edit_text);
         mEndDateEditText = findViewById(R.id.input_end_date_edit_text);
         mCreateTripButton = findViewById(R.id.create_trip_button);
+        mTripNameEditText = findViewById(R.id.trip_name_edit_text);
+        mBudgetEditText = findViewById(R.id.budget_edit_text);
 
         // create date picker
         DatePickerDialog startDatePickerDialog = createDatePickerWithEditText(mStartDateEditText);
@@ -87,19 +101,59 @@ public class UserPageActivity extends AppCompatActivity {
         mCreateTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
-                startActivity(intent);
+                String trip_name = mTripNameEditText.getText().toString();
+                String start_date = mStartDateEditText.getText().toString();
+                String end_date = mEndDateEditText.getText().toString();
+                int budget = Integer.parseInt(mBudgetEditText.getText().toString());
+                Trip new_trip = new Trip(trip_name, start_date, end_date, budget);
+
+                Gson gson = new Gson();
+                JSONObject body = null;
+                try {
+                    body = new JSONObject(gson.toJson(new_trip));
+                    Log.d(TAG, body.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_trip_endpoint);
+
+                JsonObjectRequest loginRequest = new JsonObjectRequest
+                        (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
+
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Log.d(TAG, "Add trip successfully");
+                                User.getUserInstance().getTrips().add(new_trip);
+                                User.getUserInstance().setChosen_trip_position(User.getUserInstance().getTrips().size()-1);
+                                mAdapter = new TripAdapder(getApplicationContext(), User.getUserInstance().getTrips());
+                                mRecyclerView.setAdapter(mAdapter);
+                                Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
+                                startActivity(intent);
+                            }
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                            }
+                        });
+                RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(loginRequest);
             }
         });
 
         // fetch itinerary
-        String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_places_endpoint);
-        JsonObjectRequest getTripsRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
+        String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_trip_endpoint);
+        JsonArrayRequest getTripsRequest = new JsonArrayRequest
+                (url, new Response.Listener<JSONArray>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(JSONArray response) {
                         Log.d(TAG, "Fetch trip data successfully" + response.toString());
+                        ArrayList<Trip> trips= new ArrayList<>();
+                        Gson gson = new Gson();
+                        trips = gson.fromJson(response.toString(), new TypeToken<ArrayList<Trip>>(){}.getType());
+                        User.getUserInstance().setTrips(trips);
+                        mAdapter = new TripAdapder(getApplicationContext(), User.getUserInstance().getTrips());
+                        mRecyclerView.setAdapter(mAdapter);
+                        Log.d(TAG, "Fetch trip data successfully" + trips.get(0).getId() + " " + trips.size());
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -115,15 +169,10 @@ public class UserPageActivity extends AppCompatActivity {
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(getTripsRequest);
 
         // recyclerview
-        ArrayList<Trip> trips = new ArrayList<>();
-        trips.add(new Trip("boston", "01/01/2021","01/05/2021", 100));
-        trips.add(new Trip("ATL", "11/01/2021","11/05/2021", 200));
-        trips.add(new Trip("LA", "03/01/2021","03/05/2021", 300));
-
-        RecyclerView recyclerView = findViewById(R.id.itinerary_recycler_view);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        TripAdapder adapter = new TripAdapder(this, trips);
-        recyclerView.setAdapter(adapter);
+        mRecyclerView = findViewById(R.id.itinerary_recycler_view);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mAdapter = new TripAdapder(this, User.getUserInstance().getTrips());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     private void updateLabel(EditText editText) {
@@ -149,7 +198,7 @@ public class UserPageActivity extends AppCompatActivity {
     // recyclerview
     private class TripHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Trip mTrip;
-
+        private int mPosition;
         private TextView mCity;
         private TextView mDate;
         private TextView mBudget;
@@ -163,16 +212,43 @@ public class UserPageActivity extends AppCompatActivity {
             mBudget = (TextView) itemView.findViewById(R.id.trip_budget);
         }
 
-        public void bind(Trip trip) {
+        public void bind(Trip trip, int position) {
             mTrip = trip;
-            mCity.setText(mTrip.getCity());
+            mCity.setText(mTrip.getName());
             mDate.setText(mTrip.getStartEndDate());
             mBudget.setText("$" + mTrip.getBudget());
+            mPosition = position;
         }
 
         @Override
         public void onClick(View v) {
+            String url = getResources().getString(R.string.back_end_base) + "/trips/" + mTrip.getId() + "/places.json";
+            JsonArrayRequest getTripsRequest = new JsonArrayRequest
+                    (url, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            Log.d(TAG, "Fetch places data successfully" + response.toString());
+                            ArrayList<MyPlace> places = new ArrayList<>();
+                            Gson gson = new Gson();
+                            places = gson.fromJson(response.toString(), new TypeToken<ArrayList<MyPlace>>(){}.getType());
+                            mTrip.setPlaces(places);
+                            // go to trip detail activity
+                            User.getUserInstance().setChosen_trip_position(mPosition);
+                            Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
+                            startActivity(intent);
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
 
+                        }
+                    });
+            try {
+                Log.d(TAG, "Request header" + getTripsRequest.getHeaders().toString() + getTripsRequest.toString());
+            } catch (AuthFailureError authFailureError) {
+                authFailureError.printStackTrace();
+            }
+            RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(getTripsRequest);
         }
     }
 
@@ -193,7 +269,7 @@ public class UserPageActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(TripHolder holder, int position) {
             Trip trip = mTrips.get(position);
-            holder.bind(trip);
+            holder.bind(trip, position);
         }
 
         @Override

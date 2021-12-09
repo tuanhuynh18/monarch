@@ -30,7 +30,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/place_name"
-        android:layout_marginEnd="8dp"/>
+        android:layout_marginEnd="8dp"
+        />
 
     <TextView
         android:id="@+id/place_true_cost"
@@ -43,7 +44,8 @@
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:inputType="textMultiLine"/>
 
     <View
         android:id="@+id/view"

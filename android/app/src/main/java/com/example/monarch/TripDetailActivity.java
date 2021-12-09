@@ -30,6 +30,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.monarch.data.MyPlace;
+import com.example.monarch.data.User;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -70,6 +71,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private AutoCompleteTextView mSearchText;
 
     // vars
+    private int trip_position;
     private boolean mLocationPermissionGranted = false;
     private int mMapLayoutState = 0; // 0 = contract, 1 = expand
     private GoogleMap mGoogleMap;
@@ -81,7 +83,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         if (isServicesAvailable()) {
             Log.d(TAG, "onCreate: map created.");
             setContentView(R.layout.activity_trip_detail);
-
 
             mTripItemRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
             mMapContainer = findViewById(R.id.map_container);
@@ -161,11 +162,11 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mapFragment.getMapAsync(this);
 
             // recyclerview
-            ArrayList<MyPlace> places = new ArrayList<>();
-            places.add(new MyPlace("Hongkong supermarket", "123 Atl street", 100));
-            places.add(new MyPlace("Time square", "456 New York blv", 200));
-            places.add(new MyPlace("Chocolate factory", "248 Garden Grove CA", 300));
-
+            ArrayList<MyPlace> places = User.getUserInstance().getChosenTrip().getPlaces();
+            if (places == null) {
+                places = new ArrayList<MyPlace>();
+                User.getUserInstance().getChosenTrip().setPlaces(places);
+            }
             RecyclerView recyclerView = findViewById(R.id.trip_item_list_recycler_view);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             PlaceAdapder adapter = new PlaceAdapder(this, places);
@@ -370,7 +371,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     // recyclerview
     private class PlaceHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private MyPlace mPlace;
-
+        private int mPosition;
         private TextView mPlaceName;
         private TextView mPlaceAddress;
         private TextView mEstimatedCost;
@@ -384,15 +385,17 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mEstimatedCost = (TextView) itemView.findViewById(R.id.place_true_cost);
         }
 
-        public void bind(MyPlace place) {
+        public void bind(MyPlace place, int position) {
             mPlace = place;
-            mPlaceName.setText(mPlace.getName());
-            mPlaceAddress.setText(mPlace.getAddress());
-            mEstimatedCost.setText("$" + mPlace.getEstimatedCost());
+            mPlaceName.setText(mPlace.getTitle());
+            mPlaceAddress.setText(mPlace.getAddress().toString());
+            mEstimatedCost.setText("$" + mPlace.getCost());
+            mPosition = position;
         }
 
         @Override
         public void onClick(View v) {
+            User.getUserInstance().getChosenTrip().setChosen_place_position(mPosition);
             Intent intent = new Intent(getApplicationContext(), PlaceDetailActivity.class);
             startActivity(intent);
         }
@@ -415,7 +418,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         @Override
         public void onBindViewHolder(PlaceHolder holder, int position) {
             MyPlace place = mPlaces.get(position);
-            holder.bind(place);
+            holder.bind(place, position);
         }
 
         @Override

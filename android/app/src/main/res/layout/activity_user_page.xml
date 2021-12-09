@@ -35,7 +35,7 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/input_city_edit_text"
+                android:id="@+id/trip_name_edit_text"
                 android:layout_below="@id/ready_for_travel_text"
                 android:background="#30ffffff"
                 android:hint="Which city you want to visit?"
@@ -50,8 +50,8 @@
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/input_budget_edit_text"
-                android:layout_below="@id/input_city_edit_text"
+                android:id="@+id/budget_edit_text"
+                android:layout_below="@id/trip_name_edit_text"
                 android:background="#30ffffff"
                 android:hint="What is your budget?"
                 android:textColorHint="@color/black"
@@ -66,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/input_start_date_edit_text"
-                android:layout_below="@id/input_budget_edit_text"
+                android:layout_below="@id/budget_edit_text"
                 android:background="#30ffffff"
                 android:hint="Start date"
                 android:textColorHint="@color/black"
