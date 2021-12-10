@@ -17,15 +17,13 @@ public class MyPlace {
     private double rating;
     private Address address_attributes;
 
-    private double estimated_cost;
-
     public MyPlace(Place place) {
         List<AddressComponent> listAddressComponents = place.getAddressComponents().asList();
         address = new Address(listAddressComponents);
         address_attributes = address;
         google_id = place.getId();
         int priceLevel = place.getPriceLevel() != null ? place.getPriceLevel() : 1;
-        estimated_cost = priceLevel * CostOfLiving.AVERAGE_COST_OF_LIVING.get(address.getCity());
+        cost = priceLevel * CostOfLiving.AVERAGE_COST_OF_LIVING.get(address.getState());
         latitude = place.getLatLng().latitude;
         longitude = place.getLatLng().longitude;
         note = "";
@@ -94,20 +92,7 @@ public class MyPlace {
         this.longitude = longitude;
     }
 
-    public double getEstimated_cost() {
-        return estimated_cost;
-    }
-
-    public void setEstimated_cost(int estimated_cost) {
-        this.estimated_cost = estimated_cost;
-    }
-
-    public double getEstimatedCost() {
-        return estimated_cost;
-    }
-
     public void setEstimatedCost(int mEstimatedCost) {
-        this.estimated_cost = mEstimatedCost;
     }
 
     public void setName(String mName) {

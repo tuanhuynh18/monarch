@@ -194,8 +194,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                         User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
                         mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
                         mRecyclerView.setAdapter(mAdapter);
-                        Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
-                        startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -204,6 +202,32 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     }
                 });
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(addPlaceRequest);
+
+        body = null;
+        try {
+            JSONObject data = new JSONObject();
+            data.put("google_id", place.getId());
+            body = new JSONObject().put("place", data);
+            Log.d(TAG, "add place to a trip" + body.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        url = getResources().getString(R.string.back_end_base) + "/trips/" + User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
+
+        JsonObjectRequest addPlaceToTrip = new JsonObjectRequest
+                (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "Add place to a trip successfully");
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                });
+        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(addPlaceToTrip);
     }
 
     private void geoLocate(){
@@ -420,7 +444,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mPlace = place;
             mPlaceName.setText(mPlace.getTitle());
             mPlaceAddress.setText(mPlace.getAddress().toString());
-            mEstimatedCost.setText("$" + mPlace.getEstimatedCost());
+            mEstimatedCost.setText("$" + mPlace.getCost());
             mPosition = position;
         }
 

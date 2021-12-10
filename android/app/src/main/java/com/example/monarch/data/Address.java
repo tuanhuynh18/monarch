@@ -74,10 +74,24 @@ public class Address {
         Georgia-[administrative_area_level_1, political]
         United States-[country, political]
         */
-        line1 = listAddressComponents.get(0).getName() + ' ' + listAddressComponents.get(1).getName();
+        line1 = "";
         line2 = "";
-        city = listAddressComponents.get(3).getName();
-        state = listAddressComponents.get(5).getShortName();
-        this.setZip(listAddressComponents.get(7).getName());
+        city = "";
+        state = "";
+        for (int i = 0; i < listAddressComponents.size(); i++) {
+            AddressComponent component = listAddressComponents.get(i);
+            if (component.getTypes().contains("street_name"))
+                line1 += component.getName();
+            if (component.getTypes().contains("route"))
+                line1 += component.getName();
+            if (component.getTypes().contains("locality"))
+                city = component.getName();
+            if (component.getTypes().contains("administrative_area_level_1"))
+                state += component.getShortName();
+            if (component.getTypes().contains("postal_code"))
+                zip = Integer.parseInt(component.getName());
+
+        }
+
     }
 }
