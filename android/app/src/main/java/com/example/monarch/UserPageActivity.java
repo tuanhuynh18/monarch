@@ -153,7 +153,7 @@ public class UserPageActivity extends AppCompatActivity {
                         User.getUserInstance().setTrips(trips);
                         mAdapter = new TripAdapder(getApplicationContext(), User.getUserInstance().getTrips());
                         mRecyclerView.setAdapter(mAdapter);
-                        Log.d(TAG, "Fetch trip data successfully" + trips.get(0).getId() + " " + trips.size());
+                        Log.d(TAG, "Fetch trip data successfully" + trips.size());
                     }
                 }, new Response.ErrorListener() {
                     @Override
