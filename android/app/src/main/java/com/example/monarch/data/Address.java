@@ -5,20 +5,11 @@ import com.google.android.libraries.places.api.model.AddressComponent;
 import java.util.List;
 
 public class Address {
-    private int id;
     private String line1;
     private String line2;
     private String city;
     private String state;
-    private String zip;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    private int zip;
 
     public String getLine1() {
         return line1;
@@ -53,19 +44,22 @@ public class Address {
     }
 
     public String getZip() {
-        return zip;
+        return Integer.toString(zip);
     }
 
     public void setZip(String zip) {
-        this.zip = zip;
+        this.zip = Integer.parseInt(zip);
     }
 
     public String toString() {
         line1 = line1 == null ? "" : line1 + "\n";
-        line2 = line2 == null ? "" : line2 + "\n";
+        if (line2 == null) {
+            line2 = "";
+        } else {
+            if (!line2.equals("")) line2 = line2 + "\n";
+        }
         city = city == null ? "" : city;
         state = state == null ? "" : state;
-        zip = zip == null ? "" : zip;
         return line1 + line2 + city + ", " + state + ", " + zip;
     }
 
@@ -83,7 +77,7 @@ public class Address {
         line1 = listAddressComponents.get(0).getName() + ' ' + listAddressComponents.get(1).getName();
         line2 = "";
         city = listAddressComponents.get(3).getName();
-        state = listAddressComponents.get(5).getName();
-        zip = listAddressComponents.get(7).getName();
+        state = listAddressComponents.get(5).getShortName();
+        this.setZip(listAddressComponents.get(7).getName());
     }
 }

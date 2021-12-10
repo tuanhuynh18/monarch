@@ -55,6 +55,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -127,7 +128,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 
             // Specify the types of place data to return.
-            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS, Place.Field.PRICE_LEVEL));
+            autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ADDRESS, Place.Field.LAT_LNG, Place.Field.ID, Place.Field.NAME, Place.Field.ADDRESS_COMPONENTS, Place.Field.PRICE_LEVEL, Place.Field.RATING));
 
             // Set up a PlaceSelectionListener to handle the response.
             autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
@@ -152,26 +153,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 }
             });
 
-//            mSearchText = findViewById(R.id.input_search);
-//            mSearchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
-//                    if(actionId == EditorInfo.IME_ACTION_SEARCH
-//                            || actionId == EditorInfo.IME_ACTION_DONE
-//                            || keyEvent.getAction() == KeyEvent.ACTION_DOWN
-//                            || keyEvent.getAction() == KeyEvent.KEYCODE_ENTER){
-//
-//                        //execute our method for searching
-//                        geoLocate();
-//                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(mSearchText.getWindowToken(), 0);
-//                        return true;
-//                    }
-//
-//                    return false;
-//                }
-//            });
-
             SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.map);
             mapFragment.getMapAsync(this);
@@ -195,7 +176,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         Gson gson = new Gson();
         JSONObject body = null;
         try {
-            body = new JSONObject(gson.toJson(new_place));
+            JSONObject data = new JSONObject(gson.toJson(new_place));
+            Log.d(TAG, data.toString());
+            body = new JSONObject().put("place", data);
             Log.d(TAG, body.toString());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -207,7 +190,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Add trip successfully");
+                        Log.d(TAG, "Add place successfully");
                         User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
                         mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
                         mRecyclerView.setAdapter(mAdapter);
@@ -320,7 +303,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         }
     }
 
-
     private void init() {
     }
 
@@ -431,14 +413,14 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
             mPlaceName = (TextView) itemView.findViewById(R.id.place_name);
             mPlaceAddress = (TextView) itemView.findViewById(R.id.place_address);
-            mEstimatedCost = (TextView) itemView.findViewById(R.id.place_true_cost);
+            mEstimatedCost = (TextView) itemView.findViewById(R.id.place_estimated_cost);
         }
 
         public void bind(MyPlace place, int position) {
             mPlace = place;
             mPlaceName.setText(mPlace.getTitle());
             mPlaceAddress.setText(mPlace.getAddress().toString());
-            mEstimatedCost.setText("$" + mPlace.getCost());
+            mEstimatedCost.setText("$" + mPlace.getEstimatedCost());
             mPosition = position;
         }
 

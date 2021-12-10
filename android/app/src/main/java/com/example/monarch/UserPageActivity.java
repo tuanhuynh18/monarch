@@ -176,7 +176,7 @@ public class UserPageActivity extends AppCompatActivity {
     }
 
     private void updateLabel(EditText editText) {
-        String myFormat = "MM/dd/yy"; //In which you need put here
+        String myFormat = "yyyy-mm-dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(myCalendar.getTime()));
     }

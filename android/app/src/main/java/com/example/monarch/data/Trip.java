@@ -57,6 +57,9 @@ public class Trip {
     }
 
     public String getStartEndDate() {
-        return starts_at + " - " + ends_at;
+        if (starts_at == null || ends_at == null){
+            return "? to ?";
+        }
+        return starts_at.substring(0, 10) + " to " + ends_at.substring(0,10);
     }
 }

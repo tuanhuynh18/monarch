@@ -6,21 +6,23 @@ import com.google.android.libraries.places.api.model.Place;
 import java.util.List;
 
 public class MyPlace {
-    private int id;
     private String title;
     private Address address;
-    private int cost;
+    private double cost;
     private String description;
     private String note;
     private String google_id;
     private double latitude;
     private double longitude;
+    private double rating;
+    private Address address_attributes;
 
-    private int estimated_cost;
+    private double estimated_cost;
 
     public MyPlace(Place place) {
         List<AddressComponent> listAddressComponents = place.getAddressComponents().asList();
         address = new Address(listAddressComponents);
+        address_attributes = address;
         google_id = place.getId();
         int priceLevel = place.getPriceLevel() != null ? place.getPriceLevel() : 1;
         estimated_cost = priceLevel * CostOfLiving.AVERAGE_COST_OF_LIVING.get(address.getCity());
@@ -29,14 +31,7 @@ public class MyPlace {
         note = "";
         description = "";
         title = place.getName();
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        rating = place.getRating();
     }
 
     public String getTitle() {
@@ -51,7 +46,7 @@ public class MyPlace {
         this.address = address;
     }
 
-    public int getCost() {
+    public double getCost() {
         return cost;
     }
 
@@ -99,7 +94,7 @@ public class MyPlace {
         this.longitude = longitude;
     }
 
-    public int getEstimated_cost() {
+    public double getEstimated_cost() {
         return estimated_cost;
     }
 
@@ -107,7 +102,7 @@ public class MyPlace {
         this.estimated_cost = estimated_cost;
     }
 
-    public int getEstimatedCost() {
+    public double getEstimatedCost() {
         return estimated_cost;
     }
 

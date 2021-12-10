@@ -34,7 +34,7 @@
         />
 
     <TextView
-        android:id="@+id/place_true_cost"
+        android:id="@+id/place_estimated_cost"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
