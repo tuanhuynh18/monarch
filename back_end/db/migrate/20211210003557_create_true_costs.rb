@@ -8,8 +8,6 @@ class CreateTrueCosts < ActiveRecord::Migration[7.0]
 
       t.timestamps
     end
-
-    add_index :true_costs, [:trip_id, :place_id], unique: true
   end
 end
 
