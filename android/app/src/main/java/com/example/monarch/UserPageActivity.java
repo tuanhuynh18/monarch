@@ -123,6 +123,11 @@ public class UserPageActivity extends AppCompatActivity {
                             @Override
                             public void onResponse(JSONObject response) {
                                 Log.d(TAG, "Add trip successfully");
+                                try {
+                                    new_trip.setId(response.getInt("id"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 User.getUserInstance().getTrips().add(new_trip);
                                 User.getUserInstance().setChosen_trip_position(User.getUserInstance().getTrips().size()-1);
                                 mAdapter = new TripAdapder(getApplicationContext(), User.getUserInstance().getTrips());
@@ -176,7 +181,7 @@ public class UserPageActivity extends AppCompatActivity {
     }
 
     private void updateLabel(EditText editText) {
-        String myFormat = "yyyy-mm-dd"; //In which you need put here
+        String myFormat = "yyyy-MM-dd"; //In which you need put here
         SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
         editText.setText(sdf.format(myCalendar.getTime()));
     }

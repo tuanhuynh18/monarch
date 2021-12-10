@@ -191,16 +191,15 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "Add place successfully");
-                        User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
                         mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
                         mRecyclerView.setAdapter(mAdapter);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-
                     }
                 });
+        User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(addPlaceRequest);
 
         body = null;

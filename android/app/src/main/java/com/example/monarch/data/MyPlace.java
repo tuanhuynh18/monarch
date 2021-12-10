@@ -8,6 +8,7 @@ import java.util.List;
 public class MyPlace {
     private String title;
     private Address address;
+    private double estimated_cost;
     private double cost;
     private String description;
     private String note;
@@ -16,6 +17,7 @@ public class MyPlace {
     private double longitude;
     private double rating;
     private Address address_attributes;
+    private double true_cost;
 
     public MyPlace(Place place) {
         List<AddressComponent> listAddressComponents = place.getAddressComponents().asList();
@@ -23,13 +25,14 @@ public class MyPlace {
         address_attributes = address;
         google_id = place.getId();
         int priceLevel = place.getPriceLevel() != null ? place.getPriceLevel() : 1;
-        cost = priceLevel * CostOfLiving.AVERAGE_COST_OF_LIVING.get(address.getState());
+        estimated_cost = priceLevel * CostOfLiving.AVERAGE_COST_OF_LIVING.get(address.getState());
         latitude = place.getLatLng().latitude;
         longitude = place.getLatLng().longitude;
         note = "";
         description = "";
         title = place.getName();
         rating = place.getRating();
+        cost = estimated_cost;
     }
 
     public String getTitle() {
@@ -45,11 +48,11 @@ public class MyPlace {
     }
 
     public double getCost() {
-        return cost;
+        return estimated_cost;
     }
 
     public void setCost(int cost) {
-        this.cost = cost;
+        this.estimated_cost = cost;
     }
 
     public String getDescription() {
@@ -93,6 +96,7 @@ public class MyPlace {
     }
 
     public void setEstimatedCost(int mEstimatedCost) {
+        cost = mEstimatedCost;
     }
 
     public void setName(String mName) {
