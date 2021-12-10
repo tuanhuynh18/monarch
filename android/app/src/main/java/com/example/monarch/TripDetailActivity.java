@@ -62,6 +62,7 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -91,6 +92,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private RelativeLayout mMapContainer;
     private AutoCompleteTextView mSearchText;
     private FusedLocationProviderClient fusedLocationClient;
+    private FloatingActionButton mReceiptFloatingButton;
 
     // vars
     private int trip_position;
@@ -111,7 +113,14 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
             mTripItemRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
             mMapContainer = findViewById(R.id.map_container);
-
+            mReceiptFloatingButton = findViewById(R.id.go_to_receipt_button);
+            mReceiptFloatingButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getApplicationContext(), ReceiptActivity.class);
+                    startActivity(intent);
+                }
+            });
             mFullScreenImageView = findViewById(R.id.full_screen_image_view);
             mFullScreenImageView.setOnClickListener(new View.OnClickListener() {
                 @Override

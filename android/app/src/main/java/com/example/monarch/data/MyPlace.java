@@ -35,6 +35,14 @@ public class MyPlace {
         cost = estimated_cost;
     }
 
+    public double getTrue_cost() {
+        return true_cost;
+    }
+
+    public void setTrue_cost(double true_cost) {
+        this.true_cost = true_cost;
+    }
+
     public String getTitle() {
         return title;
     }
