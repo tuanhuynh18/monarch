@@ -4,6 +4,8 @@ class Trip < ApplicationRecord
   has_many :accepted_invites, -> { where(status: :accepted) }, class_name: 'Invite'
   has_many :invited_users, through: :accepted_invites, source: :receiver, class_name: 'User'
 
+  has_many :true_costs
+
   has_and_belongs_to_many :accommodations
   has_and_belongs_to_many :places
   has_and_belongs_to_many :activities

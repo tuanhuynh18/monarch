@@ -1,4 +1,5 @@
 class Trips::PlacesController < ApplicationController
+  prepend_view_path 'app/views/trips/places'
   before_action :authenticate_user!
   before_action :set_trip
   before_action :set_place, only: %i[ show edit update destroy ]
@@ -23,7 +24,14 @@ class Trips::PlacesController < ApplicationController
 
   # POST /trips/:trip_id/places or /trips/:trip_id/places.json
   def create
-    @place = Place.find(accommodation_params[:id])
+    head :no_content if @trip.nil?
+    @place = Place.find(place_params[:id]) unless place_params[:id].nil?
+    @place = Place.find_by_google_id(place_params[:google_id]) unless place_params[:google_id].nil?
+    if @place.nil?
+      head :not_found
+      return
+    end
+
     @trip.places << @place
 
     respond_to do |format|
@@ -38,7 +46,7 @@ class Trips::PlacesController < ApplicationController
   # PATCH/PUT /trips/:trip_id/places/1 or /trips/:trip_id/places/1.json
   def update
     respond_to do |format|
-      if @place.update(accommodation_params)
+      if @place.update(place_params)
         format.json { render :show, status: :ok, location: trip_place_url(@trip, @place) }
       else
         format.json { render json: @place.errors, status: :unprocessable_entity }
@@ -57,7 +65,8 @@ class Trips::PlacesController < ApplicationController
   private
   # Use callbacks to share common setup or constraints between actions.
   def set_place
-    @place = @trip.places.find(params[:id])
+    @place = @trip.places.find_by(google_id: params[:google_id]) unless params[:google_id].nil?
+    @place = @trip.places.find(params[:id]) if params[:google_id].nil?
   end
 
   def set_trip
@@ -65,7 +74,7 @@ class Trips::PlacesController < ApplicationController
   end
 
   # Only allow a list of trusted parameters through.
-  def accommodation_params
-    params.require(:place).permit(:id)
+  def place_params
+    params.require(:place).permit(:id, :google_id)
   end
 end

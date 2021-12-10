@@ -791,7 +791,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{ \n    \"place\" : { \"id\" : 34 }\n}",
+									"raw": "{ \n    \"place\" : { \"google_id\" : 1 }\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -799,13 +799,13 @@
 									}
 								},
 								"url": {
-									"raw": "{{T_URL}}/trips/732/places.json",
+									"raw": "{{T_URL}}/trips/4/places.json",
 									"host": [
 										"{{T_URL}}"
 									],
 									"path": [
 										"trips",
-										"732",
+										"4",
 										"places.json"
 									]
 								},
@@ -1047,6 +1047,68 @@
 					]
 				},
 				{
+					"name": "True Costs",
+					"item": [
+						{
+							"name": "Add New True Cost to Trip",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"true_cost\" : {\n        \"google_id\" : \"51879\",\n        \"cost\" : 100\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/1/true_costs.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"1",
+										"true_costs.json"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update True Cost for Place",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"true_cost\" : {\n        \"google_id\" : \"40190\",\n        \"cost\" : 100\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{T_URL}}/trips/3/true_costs/1.json",
+									"host": [
+										"{{T_URL}}"
+									],
+									"path": [
+										"trips",
+										"3",
+										"true_costs",
+										"1.json"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
 					"name": "All Trips",
 					"request": {
 						"method": "GET",
@@ -1130,7 +1192,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{ \n    \"trip\" : { \n        \"name\" : \"Study Abroad\"\n    }\n}",
+							"raw": "{ \n    \"trip\" : { \n        \"name\" : \"Study Abroad\",\n        \"destination\": \"Paris\"\n    }\n}",
 							"options": {
 								"raw": {
 									"language": "json"

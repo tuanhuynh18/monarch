@@ -9,4 +9,5 @@ class Place < ApplicationRecord
   validates_presence_of :title
   validates :cost, numericality: { in: 0..1_000_000 }
   validates :rating, numericality: { in: 0..5 }
+  validates_uniqueness_of :google_id
 end
