@@ -8,6 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,6 +18,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
+import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -41,12 +43,18 @@ import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.AddressComponent;
 import com.google.android.libraries.places.api.model.AddressComponents;
@@ -82,6 +90,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private RecyclerView mTripItemRecyclerView;
     private RelativeLayout mMapContainer;
     private AutoCompleteTextView mSearchText;
+    private FusedLocationProviderClient fusedLocationClient;
 
     // vars
     private int trip_position;
@@ -97,6 +106,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         super.onCreate(savedInstanceState);
         if (isServicesAvailable()) {
             Log.d(TAG, "onCreate: map created.");
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             setContentView(R.layout.activity_trip_detail);
 
             mTripItemRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
@@ -106,11 +116,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mFullScreenImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(mMapLayoutState == MAP_LAYOUT_STATE_CONTRACTED){
+                    if (mMapLayoutState == MAP_LAYOUT_STATE_CONTRACTED) {
                         mMapLayoutState = MAP_LAYOUT_STATE_EXPANDED;
                         expandMapAnimation();
-                    }
-                    else if(mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED){
+                    } else if (mMapLayoutState == MAP_LAYOUT_STATE_EXPANDED) {
                         mMapLayoutState = MAP_LAYOUT_STATE_CONTRACTED;
                         contractMapAnimation();
                     }
@@ -163,6 +172,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                 places = new ArrayList<MyPlace>();
                 User.getUserInstance().getChosenTrip().setPlaces(places);
             }
+
             mRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mAdapter = new PlaceAdapder(this, places);
@@ -229,37 +239,41 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(addPlaceToTrip);
     }
 
-    private void geoLocate(){
+    private void geoLocate() {
         Log.d(TAG, "geoLocate: geolocating");
         String searchString = mSearchText.getText().toString();
         Geocoder geocoder = new Geocoder(TripDetailActivity.this);
         List<Address> list = new ArrayList<>();
-        try{
+        try {
             list = geocoder.getFromLocationName(searchString, 1);
-        }catch (IOException e){
-            Log.e(TAG, "geoLocate: IOException: " + e.getMessage() );
+        } catch (IOException e) {
+            Log.e(TAG, "geoLocate: IOException: " + e.getMessage());
         }
 
-        if(list.size() > 0){
+        if (list.size() > 0) {
             Address address = list.get(0);
             LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
             Log.d(TAG, "geoLocate: found a location: " + address.toString());
             moveCamera(new LatLng(address.getLatitude(), address.getLongitude()), DEFAULT_MAP_ZOOM,
                     address.getAddressLine(0));
         }
-
     }
 
-    private void moveCamera(LatLng latLng, float zoom, String title){
-        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude );
+    private void moveCamera(LatLng latLng, float zoom, String title) {
+        Log.d(TAG, "moveCamera: moving the camera to: lat: " + latLng.latitude + ", lng: " + latLng.longitude);
         mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
-
-        if(!title.equals("My Location")){
-            MarkerOptions options = new MarkerOptions()
-                    .position(latLng)
-                    .title(title);
-            mGoogleMap.addMarker(options);
+        if (!title.equals("My Location")) {
+            addPinLocation(latLng, title, BitmapDescriptorFactory.HUE_BLUE);
+        } else {
+            addPinLocation(latLng, title, BitmapDescriptorFactory.HUE_RED);
         }
+    }
+
+    private void addPinLocation(LatLng latLng, String title, float color) {
+        MarkerOptions options = new MarkerOptions()
+                .position(latLng)
+                .title(title).icon(BitmapDescriptorFactory.defaultMarker(color));
+        mGoogleMap.addMarker(options);
     }
 
 
@@ -267,7 +281,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     protected void onResume() {
         super.onResume();
         if (isServicesAvailable()) {
-            if(isGPSEnabled()) {
+            if (isGPSEnabled()) {
                 if (mLocationPermissionGranted) {
                     // display map
                 } else {
@@ -330,7 +344,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     // checking if the device have google play services
-    public boolean isServicesAvailable(){
+    public boolean isServicesAvailable() {
         Log.d(TAG, "isServicesAvailable: checking google services version");
 
         int available = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(TripDetailActivity.this);
@@ -338,18 +352,17 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             // everything is good and user can have google map
             Log.d(TAG, "isServicesAvailable: Google Play services is available");
             return true;
-        }
-        else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(available)) {
             // services not available but we can resolve it
             Log.d(TAG, "isServicesAvailable: services not available but we can resolve it");
             Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(TripDetailActivity.this, available, ERROR_DIALOG_REQUEST);
             dialog.show();
-        }
-        else {
+        } else {
             Toast.makeText(this, "Unable to run map", Toast.LENGTH_SHORT).show();
         }
         return false;
     }
+
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("This application requires GPS to work properly, do you want to enable it?")
@@ -375,7 +388,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     }
 
     // -------------------- helper functions
-    private void expandMapAnimation(){
+    private void expandMapAnimation() {
         ViewWeightAnimationWrapper mapAnimationWrapper = new ViewWeightAnimationWrapper(mMapContainer);
         ObjectAnimator mapAnimation = ObjectAnimator.ofFloat(mapAnimationWrapper,
                 "weight",
@@ -394,7 +407,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         mapAnimation.start();
     }
 
-    private void contractMapAnimation(){
+    private void contractMapAnimation() {
         ViewWeightAnimationWrapper mapAnimationWrapper = new ViewWeightAnimationWrapper(mMapContainer);
         ObjectAnimator mapAnimation = ObjectAnimator.ofFloat(mapAnimationWrapper,
                 "weight",
@@ -416,10 +429,37 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mGoogleMap = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        fusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        LatLng currentLocation = new LatLng(33.77576938714813, -84.39629573138684);
+                        if (location != null) {
+                            // Logic to handle location object
+                            currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                            moveCamera(currentLocation, DEFAULT_MAP_ZOOM, "My location");
+                        }
+                    }
+                });
         LatLng currentLocation = new LatLng(33.77576938714813, -84.39629573138684);
-
-        // Move the camera instantly to Sydney with a zoom of 15.
+        fusedLocationClient.getLastLocation();
         moveCamera(currentLocation, DEFAULT_MAP_ZOOM, "My location");
+        // Move the camera instantly to Sydney with a zoom of 15.
+        for (MyPlace p: User.getUserInstance().getChosenTrip().getPlaces()) {
+            Log.d(TAG, p.getTitle() + " - " + p.getLatitude() + " - " +p.getLongitude() + "\n");
+            addPinLocation(new LatLng(p.getLatitude(), p.getLongitude()), p.getTitle(), BitmapDescriptorFactory.HUE_BLUE);
+        }
     }
 
     // recyclerview
