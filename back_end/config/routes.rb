@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :true_costs
   namespace :admin do
     resources :users
     resources :accommodations
@@ -13,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :accommodations, only: %i[ index show ]
   resources :activities, only: %i[ index show ]
-  resources :places, only: %i[ index show ]
+  resources :places, only: %i[ index show create update ]
   get 'invites/pending', to: 'trips/invites#pending'
 
   resources :trips do
@@ -21,6 +22,7 @@ Rails.application.routes.draw do
     resources :activities, controller: 'trips/activities'
     resources :places, controller: 'trips/places'
     resources :invites, except: :pending, controller: 'trips/invites'
+    resources :true_costs, controller: 'trips/true_costs'
   end
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_09_030248) do
+ActiveRecord::Schema.define(version: 2021_12_10_003557) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,7 +89,7 @@ ActiveRecord::Schema.define(version: 2021_12_09_030248) do
     t.datetime "updated_at", precision: 6, null: false
     t.decimal "latitude"
     t.decimal "longitude"
-    t.integer "google_id"
+    t.string "google_id"
     t.index ["addressable_type", "addressable_id"], name: "index_places_on_addressable"
     t.index ["google_id"], name: "index_places_on_google_id"
   end
@@ -111,6 +111,18 @@ ActiveRecord::Schema.define(version: 2021_12_09_030248) do
     t.index ["user_id"], name: "index_trips_on_user_id"
   end
 
+  create_table "true_costs", force: :cascade do |t|
+    t.bigint "trip_id", null: false
+    t.bigint "place_id", null: false
+    t.bigint "user_id", null: false
+    t.integer "cost"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["place_id"], name: "index_true_costs_on_place_id"
+    t.index ["trip_id"], name: "index_true_costs_on_trip_id"
+    t.index ["user_id"], name: "index_true_costs_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -127,4 +139,7 @@ ActiveRecord::Schema.define(version: 2021_12_09_030248) do
   add_foreign_key "invites", "users", column: "receiver_id"
   add_foreign_key "invites", "users", column: "sender_id"
   add_foreign_key "trips", "users"
+  add_foreign_key "true_costs", "places"
+  add_foreign_key "true_costs", "trips"
+  add_foreign_key "true_costs", "users"
 end

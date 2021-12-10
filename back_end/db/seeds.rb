@@ -39,6 +39,7 @@ while Place.count <= 30
   pl.address = pl.build_address _address
   pl.latitude  = _dec(-180, 180)
   pl.longitude = _dec(-180, 180)
+  pl.google_id = _dec(0, 100000).to_s
   pl.save!
 end
 
@@ -62,7 +63,9 @@ Trip.all.each do |trip|
     trip.activities << Activity.find(Activity.pluck(:id).sample)
   end
   while trip.places.count <= 5
-    trip.places << Place.find(Place.pluck(:id).sample)
+    place = Place.find(Place.pluck(:id).sample)
+    trip.places << place
+    #TrueCost.create(user: @bob, trip: trip, place: place, cost: _dec(1, 1000))
   end
   while trip.accommodations.count <= 3
     trip.accommodations << Accommodation.find(Accommodation.pluck(:id).sample)
@@ -70,7 +73,7 @@ Trip.all.each do |trip|
   trip.save!
 end
 
-obj = [ User, Trip, Activity, Accommodation, Place, Invite, Address ]
+obj = [ User, Trip, Activity, Accommodation, Place, Invite, Address, TrueCost ]
 obj.each do |o|
   puts "#{o}: #{o.count}"
 end

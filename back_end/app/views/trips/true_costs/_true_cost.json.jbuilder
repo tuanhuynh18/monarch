@@ -1,0 +1,1 @@
+json.extract! true_cost, :id, :trip_id, :place_id, :user_id, :cost, :created_at, :updated_at
