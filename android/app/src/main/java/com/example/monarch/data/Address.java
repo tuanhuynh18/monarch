@@ -1,15 +1,52 @@
 package com.example.monarch.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.libraries.places.api.model.AddressComponent;
 
 import java.util.List;
 
-public class Address {
+public class Address implements Parcelable {
     private String line1;
     private String line2;
     private String city;
     private String state;
     private int zip;
+    private int addressable_id;
+
+    public void setZip(int zip) {
+        this.zip = zip;
+    }
+
+    public int getAddressable_id() {
+        return addressable_id;
+    }
+
+    public void setAddressable_id(int addressable_id) {
+        this.addressable_id = addressable_id;
+    }
+
+
+    protected Address(Parcel in) {
+        line1 = in.readString();
+        line2 = in.readString();
+        city = in.readString();
+        state = in.readString();
+        zip = in.readInt();
+    }
+
+    public static final Creator<Address> CREATOR = new Creator<Address>() {
+        @Override
+        public Address createFromParcel(Parcel in) {
+            return new Address(in);
+        }
+
+        @Override
+        public Address[] newArray(int size) {
+            return new Address[size];
+        }
+    };
 
     public String getLine1() {
         return line1;
@@ -93,5 +130,19 @@ public class Address {
 
         }
 
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(line1);
+        parcel.writeString(line2);
+        parcel.writeString(city);
+        parcel.writeString(state);
+        parcel.writeInt(zip);
     }
 }

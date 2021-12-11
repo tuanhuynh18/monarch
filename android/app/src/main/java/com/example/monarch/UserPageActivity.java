@@ -13,6 +13,7 @@ import android.icu.text.SimpleDateFormat;
 import android.icu.util.Calendar;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +46,7 @@ import org.w3c.dom.Text;
 import java.net.CookieHandler;
 import java.net.CookieManager;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -59,6 +61,7 @@ public class UserPageActivity extends AppCompatActivity {
     private EditText mBudgetEditText;
     private TripAdapder mAdapter;
     RecyclerView mRecyclerView;
+    List<Integer> ids;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -107,6 +110,7 @@ public class UserPageActivity extends AppCompatActivity {
                 int budget = Integer.parseInt(mBudgetEditText.getText().toString());
                 Trip new_trip = new Trip(trip_name, start_date, end_date, budget);
 
+
                 Gson gson = new Gson();
                 JSONObject body = null;
                 try {
@@ -124,16 +128,16 @@ public class UserPageActivity extends AppCompatActivity {
                             public void onResponse(JSONObject response) {
                                 Log.d(TAG, "Add trip successfully");
                                 try {
+                                    User.getUserInstance().getTrips().add(new_trip);
+                                    User.getUserInstance().setChosen_trip_position(User.getUserInstance().getTrips().size()-1);
                                     new_trip.setId(response.getInt("id"));
+                                    Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
+                                    startActivity(intent);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-                                User.getUserInstance().getTrips().add(new_trip);
-                                User.getUserInstance().setChosen_trip_position(User.getUserInstance().getTrips().size()-1);
                                 mAdapter = new TripAdapder(getApplicationContext(), User.getUserInstance().getTrips());
                                 mRecyclerView.setAdapter(mAdapter);
-                                Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
-                                startActivity(intent);
                             }
                         }, new Response.ErrorListener() {
                             @Override

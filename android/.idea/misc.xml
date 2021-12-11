@@ -3,7 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/baseline_delete_white_24dp.xml" value="0.16458333333333333" />
         <entry key="app/src/main/res/layout/activity_trip_detail.xml" value="0.1453125" />
+        <entry key="app/src/main/res/layout/list_item_place.xml" value="0.7274749721913237" />
+        <entry key="app/src/main/res/layout/list_item_trip.xml" value="0.37037347358876477" />
       </map>
     </option>
   </component>

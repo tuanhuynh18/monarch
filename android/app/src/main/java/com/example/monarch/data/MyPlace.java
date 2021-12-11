@@ -1,11 +1,14 @@
 package com.example.monarch.data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.android.libraries.places.api.model.AddressComponent;
 import com.google.android.libraries.places.api.model.Place;
 
 import java.util.List;
 
-public class MyPlace {
+public class MyPlace implements Parcelable {
     private String title;
     private Address address;
     private double estimated_cost;
@@ -19,7 +22,7 @@ public class MyPlace {
     private Address address_attributes;
     private double true_cost;
 
-    public MyPlace(Place place) {
+    public MyPlace(Place place)  {
         List<AddressComponent> listAddressComponents = place.getAddressComponents().asList();
         address = new Address(listAddressComponents);
         address_attributes = address;
@@ -34,6 +37,31 @@ public class MyPlace {
         rating = place.getRating();
         cost = estimated_cost;
     }
+
+    protected MyPlace(Parcel in) {
+        title = in.readString();
+        estimated_cost = in.readDouble();
+        cost = in.readDouble();
+        description = in.readString();
+        note = in.readString();
+        google_id = in.readString();
+        latitude = in.readDouble();
+        longitude = in.readDouble();
+        rating = in.readDouble();
+        true_cost = in.readDouble();
+    }
+
+    public static final Creator<MyPlace> CREATOR = new Creator<MyPlace>() {
+        @Override
+        public MyPlace createFromParcel(Parcel in) {
+            return new MyPlace(in);
+        }
+
+        @Override
+        public MyPlace[] newArray(int size) {
+            return new MyPlace[size];
+        }
+    };
 
     public double getTrue_cost() {
         return true_cost;
@@ -112,5 +140,24 @@ public class MyPlace {
 
     public Address getAddress() {
         return address;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(title);
+        parcel.writeDouble(estimated_cost);
+        parcel.writeDouble(cost);
+        parcel.writeString(description);
+        parcel.writeString(note);
+        parcel.writeString(google_id);
+        parcel.writeDouble(latitude);
+        parcel.writeDouble(longitude);
+        parcel.writeDouble(rating);
+        parcel.writeDouble(true_cost);
     }
 }

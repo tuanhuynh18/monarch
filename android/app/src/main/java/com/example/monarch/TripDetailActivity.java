@@ -21,6 +21,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +35,9 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
@@ -66,8 +69,10 @@ import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -104,7 +109,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     RecyclerView mRecyclerView;
     PlaceAdapder mAdapter;
     SwipeMenuListView swipeMenuListView;
+    public List<MyPlace> savedPlaces;
 //    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
+    SwipeViewUtils swipeViewUtils;
+    List<Integer> ids;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,10 +121,18 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             Log.d(TAG, "onCreate: map created.");
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             setContentView(R.layout.activity_trip_detail);
-            swipeMenuListView = findViewById(R.id.swipe_list);
-            SwipeViewUtils swipeViewUtils = new SwipeViewUtils();
-            swipeViewUtils.create_swipe_list(this,this,swipeMenuListView);
-            swipeViewUtils.get_list();
+//            swipeMenuListView = findViewById(R.id.swipe_list);
+//            savedPlaces = new ArrayList<>();
+//            swipeViewUtils = new SwipeViewUtils();
+//            swipeViewUtils.create_swipe_list(this,this,swipeMenuListView);
+//            swipeViewUtils.get_list();
+            ids = new ArrayList<>();
+            Trip tmp = User.getUserInstance().getChosenTrip();
+            if (tmp.getPlaces() != null) {
+                for (MyPlace m : tmp.getPlaces()) {
+                    ids.add(m.getAddress().getAddressable_id());
+                }
+            }
             mTripItemRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
             mMapContainer = findViewById(R.id.map_container);
             mReceiptFloatingButton = findViewById(R.id.go_to_receipt_button);
@@ -197,8 +213,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     private void addPlace(Place place) {
         MyPlace new_place = new MyPlace(place);
-        Gson gson = new Gson();
+//        swipeViewUtils.activityItemList.add(new_place);
+//        swipeViewUtils.userEnterAdapter.notifyDataSetChanged();
         JSONObject body = null;
+        Gson gson = new Gson();
         try {
             JSONObject data = new JSONObject(gson.toJson(new_place));
             Log.d(TAG, data.toString());
@@ -207,7 +225,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_places_endpoint);
+        String url = getResources().getString(R.string.back_end_base) + "/trips/" +User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
 
         JsonObjectRequest addPlaceRequest = new JsonObjectRequest
                 (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
@@ -215,8 +233,35 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "Add place successfully");
-                        mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
-                        mRecyclerView.setAdapter(mAdapter);
+//                        mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
+//                        mRecyclerView.setAdapter(mAdapter);
+//                        User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
+                        mAdapter.notifyDataSetChanged();
+                        ids = new ArrayList<>();
+                        String url1 = getResources().getString(R.string.back_end_base) + "/trips/" + User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
+                        JsonArrayRequest TripDetail = new JsonArrayRequest
+                                (Request.Method.GET, url1,new JSONArray(), new Response.Listener<JSONArray>() {
+
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        Log.d(TAG, "fetch places of a trip successfully");
+                                        try {
+                                            for (int i = 0; i < response.length(); i++) {
+                                                ids.add((Integer) response.getJSONObject(i).get("id"));
+
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                });
+                        Volley.newRequestQueue(TripDetailActivity.this).add(TripDetail);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -224,7 +269,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
                     }
                 });
         User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
-        RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(addPlaceRequest);
+        Volley.newRequestQueue(TripDetailActivity.this).add(addPlaceRequest);
+
+
 
         body = null;
         try {
@@ -483,6 +530,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         private TextView mPlaceName;
         private TextView mPlaceAddress;
         private TextView mEstimatedCost;
+        private ImageView deleteButton;
 
         public PlaceHolder(LayoutInflater inflater, ViewGroup parent) {
             super(inflater.inflate(R.layout.list_item_place, parent, false));
@@ -491,6 +539,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mPlaceName = (TextView) itemView.findViewById(R.id.place_name);
             mPlaceAddress = (TextView) itemView.findViewById(R.id.place_address);
             mEstimatedCost = (TextView) itemView.findViewById(R.id.place_estimated_cost);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
         }
 
         public void bind(MyPlace place, int position) {
@@ -499,6 +548,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mPlaceAddress.setText(mPlace.getAddress().toString());
             mEstimatedCost.setText("$" + mPlace.getCost());
             mPosition = position;
+
         }
 
         @Override
@@ -527,6 +577,33 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         public void onBindViewHolder(PlaceHolder holder, int position) {
             MyPlace place = mPlaces.get(position);
             holder.bind(place, position);
+            holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String url = getResources().getString(R.string.back_end_base) + "/trips/" + User.getUserInstance().getChosenTrip().getId() + "/places"+"/"+ids.get(position);
+                    Log.e(TAG, url);
+                    Gson gson = new GsonBuilder().create();
+                    new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
+                    mPlaces.remove(position);
+                    ids.remove(position);
+                    mAdapter.notifyDataSetChanged();
+                    JsonObjectRequest TripDetail = new JsonObjectRequest
+                            (Request.Method.DELETE, url,new JSONObject(),new Response.Listener<JSONObject>() {
+
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Log.d(TAG, "delete place success");
+                                }
+
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                }
+                            });
+                    RequestQueueSingleton.getInstance(TripDetailActivity.this).addToRequestQueue(TripDetail);
+                }
+            });
         }
 
         @Override
