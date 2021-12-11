@@ -43,6 +43,7 @@ import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
+import com.example.monarch.util.FirestoreUtils;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -78,6 +79,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 public class TripDetailActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -205,6 +207,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mAdapter = new PlaceAdapder(this, places);
             mRecyclerView.setAdapter(mAdapter);
+
+
+            FirestoreUtils firestoreUtils = new FirestoreUtils();
+            firestoreUtils.modifyFireStore("TripDetailActivity:"+ User.getUserInstance().getChosenTrip().getCity(), Calendar.getInstance().getTime().toString());
         }
     }
 
@@ -223,6 +229,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             e.printStackTrace();
         }
         String url = getResources().getString(R.string.back_end_base) + "/trips/" +User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
+
+        FirestoreUtils firestoreUtils = new FirestoreUtils();
+        firestoreUtils.clickLog("AddPlace Click", Calendar.getInstance().getTime().toString());
 
         JsonObjectRequest addPlaceRequest = new JsonObjectRequest
                 (Request.Method.POST, url, body, new Response.Listener<JSONObject>() {
@@ -577,6 +586,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             holder.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+                    FirestoreUtils firestoreUtils = new FirestoreUtils();
+                    firestoreUtils.clickLog("DeletePlace" + " Click", java.util.Calendar.getInstance().getTime().toString());
+
                     String url = getResources().getString(R.string.back_end_base) + "/trips/" + User.getUserInstance().getChosenTrip().getId() + "/places"+"/"+ids.get(position);
                     Log.e(TAG, url);
                     Gson gson = new GsonBuilder().create();

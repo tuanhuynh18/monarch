@@ -15,9 +15,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.User;
+import com.example.monarch.util.FirestoreUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 public class PlaceDetailActivity extends AppCompatActivity {
     private static final String TAG = "Place detail";
@@ -48,6 +51,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
                         body = new JSONObject().put("true_cost", data);
                         Log.d(TAG, "add true cost to place" + body.toString());
                         User.getUserInstance().getChosenTrip().getChosenPlace().setTrue_cost(Double.parseDouble(doubleStr));
+
+                        FirestoreUtils firestoreUtils = new FirestoreUtils();
+                        firestoreUtils.clickLog("EnterTrueCost" + " Click", java.util.Calendar.getInstance().getTime().toString());
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -71,5 +77,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        FirestoreUtils firestoreUtils = new FirestoreUtils();
+        firestoreUtils.modifyFireStore("PlaceActivity:"+ place.getTitle(), Calendar.getInstance().getTime().toString());
     }
 }

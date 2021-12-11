@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "33435680744",
+    "project_id": "monarch-d42da",
+    "storage_bucket": "monarch-d42da.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:33435680744:android:97c2ce3d5b58f21357ae5d",
+        "android_client_info": {
+          "package_name": "com.example.monarch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "33435680744-si8ri4radm70ritfcfkvp34sk98pfqm5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqZysfR0YseK0nlhLgU4T0ZhnmuJZ6A2Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "33435680744-si8ri4radm70ritfcfkvp34sk98pfqm5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

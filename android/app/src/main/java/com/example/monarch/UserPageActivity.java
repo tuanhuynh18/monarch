@@ -33,6 +33,7 @@ import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
+import com.example.monarch.util.FirestoreUtils;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -90,6 +91,8 @@ public class UserPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 startDatePickerDialog.show();
+                FirestoreUtils firestoreUtils = new FirestoreUtils();
+                firestoreUtils.clickLog("StartDate" + " Click", java.util.Calendar.getInstance().getTime().toString());
             }
         });
         mEndDateEditText.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +100,8 @@ public class UserPageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // TODO Auto-generated method stub
                 endDatePickerDialog.show();
+                FirestoreUtils firestoreUtils = new FirestoreUtils();
+                firestoreUtils.clickLog("EndDate" + " Click", java.util.Calendar.getInstance().getTime().toString());
             }
         });
 
@@ -110,6 +115,9 @@ public class UserPageActivity extends AppCompatActivity {
                 int budget = Integer.parseInt(mBudgetEditText.getText().toString());
                 Trip new_trip = new Trip(trip_name, start_date, end_date, budget);
 
+
+                FirestoreUtils firestoreUtils = new FirestoreUtils();
+                firestoreUtils.clickLog("MainSearchButton" + " Click", java.util.Calendar.getInstance().getTime().toString());
 
                 Gson gson = new Gson();
                 JSONObject body = null;
@@ -182,6 +190,9 @@ public class UserPageActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new TripAdapder(this, User.getUserInstance().getTrips());
         mRecyclerView.setAdapter(mAdapter);
+
+        FirestoreUtils firestoreUtils = new FirestoreUtils();
+        firestoreUtils.modifyFireStore("UserPageActivity:", java.util.Calendar.getInstance().getTime().toString());
     }
 
     private void updateLabel(EditText editText) {
@@ -245,6 +256,9 @@ public class UserPageActivity extends AppCompatActivity {
                             User.getUserInstance().setChosen_trip_position(mPosition);
                             Intent intent = new Intent(getApplicationContext(), TripDetailActivity.class);
                             startActivity(intent);
+
+                            FirestoreUtils firestoreUtils = new FirestoreUtils();
+                            firestoreUtils.clickLog("trip:" + mTrip.getId() + " Click", java.util.Calendar.getInstance().getTime().toString());
                         }
                     }, new Response.ErrorListener() {
                         @Override

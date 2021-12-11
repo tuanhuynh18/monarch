@@ -15,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.User;
+import com.example.monarch.util.FirestoreUtils;
 import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONException;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 
 import java.net.CookieHandler;
 import java.net.CookieManager;
+import java.util.Calendar;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "Login";
@@ -49,6 +51,10 @@ public class LoginActivity extends AppCompatActivity {
         mLoginBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                FirestoreUtils firestoreUtils = new FirestoreUtils();
+                firestoreUtils.clickLog("Login" + " Click", java.util.Calendar.getInstance().getTime().toString());
+
                 String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.login_endpoint);
                 JSONObject loginData = new JSONObject();
                 JSONObject body = new JSONObject();
@@ -84,9 +90,15 @@ public class LoginActivity extends AppCompatActivity {
         mRegisterTextView.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+
+                FirestoreUtils firestoreUtils = new FirestoreUtils();
+                firestoreUtils.clickLog("LoginToRegister" + " Click", java.util.Calendar.getInstance().getTime().toString());
+
                 Intent intent = new Intent(getApplicationContext(), RegisterAccountActivity.class);
                 startActivity(intent);
             }
         });
+        FirestoreUtils firestoreUtils = new FirestoreUtils();
+        firestoreUtils.modifyFireStore("LoginActivity", Calendar.getInstance().getTime().toString());
     }
 }

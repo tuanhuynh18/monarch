@@ -19,9 +19,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.User;
+import com.example.monarch.util.FirestoreUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.Calendar;
 
 public class RegisterAccountActivity extends AppCompatActivity {
     private static final String TAG = "Register";
@@ -43,6 +46,9 @@ public class RegisterAccountActivity extends AppCompatActivity {
         mRegisterBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                FirestoreUtils firestoreUtils = new FirestoreUtils();
+                firestoreUtils.clickLog("Register" + " Click", java.util.Calendar.getInstance().getTime().toString());
+
                 String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.register_endpoint);
                 JSONObject registerData = new JSONObject();
                 JSONObject body = new JSONObject();
@@ -77,5 +83,8 @@ public class RegisterAccountActivity extends AppCompatActivity {
                 Log.d(TAG, "Made login request" + body.toString());
             }
         });
+
+        FirestoreUtils firestoreUtils = new FirestoreUtils();
+        firestoreUtils.modifyFireStore("RegisterActivity", Calendar.getInstance().getTime().toString());
     }
 }

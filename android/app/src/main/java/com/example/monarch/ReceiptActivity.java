@@ -24,6 +24,7 @@ import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
+import com.example.monarch.util.FirestoreUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -33,6 +34,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ReceiptActivity extends AppCompatActivity {
@@ -56,6 +58,10 @@ public class ReceiptActivity extends AppCompatActivity {
         mRecyclerview.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new PlaceAdapder(this, (ArrayList<MyPlace>) places);
         mRecyclerview.setAdapter(mAdapter);
+
+
+        FirestoreUtils firestoreUtils = new FirestoreUtils();
+        firestoreUtils.modifyFireStore("ReceiptActivity", Calendar.getInstance().getTime().toString());
     }
 
     @Override
