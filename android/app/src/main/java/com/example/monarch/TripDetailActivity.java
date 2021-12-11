@@ -43,7 +43,6 @@ import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
-import com.example.monarch.util.SwipeViewUtils;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -108,10 +107,8 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mGoogleMap;
     RecyclerView mRecyclerView;
     PlaceAdapder mAdapter;
-    SwipeMenuListView swipeMenuListView;
     public List<MyPlace> savedPlaces;
 //    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
-    SwipeViewUtils swipeViewUtils;
     List<Integer> ids;
 
     @Override
