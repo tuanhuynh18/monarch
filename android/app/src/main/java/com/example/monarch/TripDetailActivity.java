@@ -35,10 +35,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.baoyz.swipemenulistview.SwipeMenuListView;
 import com.example.monarch.API.RequestQueueSingleton;
 import com.example.monarch.data.MyPlace;
 import com.example.monarch.data.Trip;
 import com.example.monarch.data.User;
+import com.example.monarch.util.SwipeViewUtils;
 import com.example.monarch.util.ViewWeightAnimationWrapper;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -101,6 +103,7 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
     private GoogleMap mGoogleMap;
     RecyclerView mRecyclerView;
     PlaceAdapder mAdapter;
+    SwipeMenuListView swipeMenuListView;
 //    private PlaceAutocompleteAdapter mPlaceAutocompleteAdapter;
 
     @Override
@@ -110,7 +113,10 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
             Log.d(TAG, "onCreate: map created.");
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
             setContentView(R.layout.activity_trip_detail);
-
+            swipeMenuListView = findViewById(R.id.swipe_list);
+            SwipeViewUtils swipeViewUtils = new SwipeViewUtils();
+            swipeViewUtils.create_swipe_list(this,this,swipeMenuListView);
+            swipeViewUtils.get_list();
             mTripItemRecyclerView = findViewById(R.id.trip_item_list_recycler_view);
             mMapContainer = findViewById(R.id.map_container);
             mReceiptFloatingButton = findViewById(R.id.go_to_receipt_button);
@@ -191,7 +197,6 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
     private void addPlace(Place place) {
         MyPlace new_place = new MyPlace(place);
-
         Gson gson = new Gson();
         JSONObject body = null;
         try {

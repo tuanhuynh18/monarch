@@ -74,6 +74,11 @@
             android:layout_weight="50"
             android:id="@+id/trip_item_list_recycler_view"/>
 
+        <com.baoyz.swipemenulistview.SwipeMenuListView
+            android:id="@+id/swipe_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></com.baoyz.swipemenulistview.SwipeMenuListView>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
