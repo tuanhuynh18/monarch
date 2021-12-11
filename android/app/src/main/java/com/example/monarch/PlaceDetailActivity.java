@@ -47,6 +47,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                         data.put("cost", Double.parseDouble(doubleStr));
                         body = new JSONObject().put("true_cost", data);
                         Log.d(TAG, "add true cost to place" + body.toString());
+                        User.getUserInstance().getChosenTrip().getChosenPlace().setTrue_cost(Double.parseDouble(doubleStr));
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -66,6 +67,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                                 }
                             });
                     RequestQueueSingleton.getInstance(getApplicationContext()).addToRequestQueue(updateTrueCost);
+
                 }
             }
         });

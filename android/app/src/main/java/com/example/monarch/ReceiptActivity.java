@@ -73,9 +73,6 @@ public class ReceiptActivity extends AppCompatActivity {
 
         @Override
         public void onClick(View v) {
-            User.getUserInstance().getChosenTrip().setChosen_place_position(mPosition);
-            Intent intent = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-            startActivity(intent);
         }
     }
 
