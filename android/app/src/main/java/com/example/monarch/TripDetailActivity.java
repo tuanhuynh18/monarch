@@ -228,7 +228,9 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        String url = getResources().getString(R.string.back_end_base) + "/trips/" +User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
+
+
+        String url = getResources().getString(R.string.back_end_base) + getResources().getString(R.string.get_all_places_endpoint);
 
         FirestoreUtils firestoreUtils = new FirestoreUtils();
         firestoreUtils.clickLog("AddPlace Click", Calendar.getInstance().getTime().toString());
@@ -238,36 +240,12 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Add place successfully");
+                        Log.e(TAG, "Add place successfully");
 //                        mAdapter = new PlaceAdapder(getApplicationContext(), User.getUserInstance().getChosenTrip().getPlaces());
 //                        mRecyclerView.setAdapter(mAdapter);
 //                        User.getUserInstance().getChosenTrip().getPlaces().add(new_place);
                         mAdapter.notifyDataSetChanged();
-                        ids = new ArrayList<>();
-                        String url1 = getResources().getString(R.string.back_end_base) + "/trips/" + User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
-                        JsonArrayRequest TripDetail = new JsonArrayRequest
-                                (Request.Method.GET, url1,new JSONArray(), new Response.Listener<JSONArray>() {
 
-                                    @Override
-                                    public void onResponse(JSONArray response) {
-                                        Log.d(TAG, "fetch places of a trip successfully");
-                                        try {
-                                            for (int i = 0; i < response.length(); i++) {
-                                                ids.add((Integer) response.getJSONObject(i).get("id"));
-
-                                            }
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                        }
-
-                                    }
-                                }, new Response.ErrorListener() {
-                                    @Override
-                                    public void onErrorResponse(VolleyError error) {
-
-                                    }
-                                });
-                        Volley.newRequestQueue(TripDetailActivity.this).add(TripDetail);
                     }
                 }, new Response.ErrorListener() {
                     @Override
@@ -295,7 +273,33 @@ public class TripDetailActivity extends AppCompatActivity implements OnMapReadyC
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "Add place to a trip successfully");
+                        Log.e(TAG, "Add place to a trip successfully");
+
+                        ids = new ArrayList<>();
+                        String url1 = getResources().getString(R.string.back_end_base) + "/trips/" + User.getUserInstance().getChosenTrip().getId() + getResources().getString(R.string.get_all_places_endpoint);
+                        JsonArrayRequest TripDetail = new JsonArrayRequest
+                                (Request.Method.GET, url1,new JSONArray(), new Response.Listener<JSONArray>() {
+
+                                    @Override
+                                    public void onResponse(JSONArray response) {
+                                        Log.d(TAG, "fetch places of a trip successfully");
+                                        try {
+                                            for (int i = 0; i < response.length(); i++) {
+                                                ids.add((Integer) response.getJSONObject(i).get("id"));
+
+                                            }
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                }, new Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                    }
+                                });
+                        Volley.newRequestQueue(TripDetailActivity.this).add(TripDetail);
                     }
                 }, new Response.ErrorListener() {
                     @Override
