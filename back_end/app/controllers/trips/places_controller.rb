@@ -32,7 +32,7 @@ class Trips::PlacesController < ApplicationController
       return
     end
 
-    @trip.places << @place
+    @trip.places << @place unless @trip.places.pluck(:google_id).include?(place_params[:google_id])
 
     respond_to do |format|
       if !@place.nil? && @trip.save

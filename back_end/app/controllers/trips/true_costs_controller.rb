@@ -26,7 +26,7 @@ class Trips::TrueCostsController < ApplicationController
     @true_cost.place = place
     @true_cost.cost = true_cost_params[:cost]
 
-    @trip.places << place unless place.nil?
+    @trip.places << place unless place.nil? || @trip.places.include?(place)
 
     respond_to do |format|
       if @true_cost.save
